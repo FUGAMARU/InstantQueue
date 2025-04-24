@@ -1,48 +1,45 @@
-import { component$ } from "@builder.io/qwik";
-import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { component$ } from "@builder.io/qwik"
+import { useDocumentHead, useLocation } from "@builder.io/qwik-city"
 
 /**
  * The RouterHead component is placed inside of the document `<head>` element.
  */
 export const RouterHead = component$(() => {
-  const head = useDocumentHead();
-  const loc = useLocation();
+  const head = useDocumentHead()
+  const loc = useLocation()
 
   return (
     <>
       <title>{head.title}</title>
 
-      <link rel="canonical" href={loc.url.href} />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      <link href={loc.url.href} rel="canonical" />
+      <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+      <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
 
-      {head.meta.map((m) => (
+      {head.meta.map(m => (
         <meta key={m.key} {...m} />
       ))}
 
-      {head.links.map((l) => (
+      {head.links.map(l => (
         <link key={l.key} {...l} />
       ))}
 
-      {head.styles.map((s) => (
+      {head.styles.map(s => (
         <style
           key={s.key}
           {...s.props}
-          {...(s.props?.dangerouslySetInnerHTML
-            ? {}
-            : { dangerouslySetInnerHTML: s.style })}
+          {...(s.props?.dangerouslySetInnerHTML ? {} : { dangerouslySetInnerHTML: s.style })}
         />
       ))}
 
-      {head.scripts.map((s) => (
+      {head.scripts.map(s => (
         <script
           key={s.key}
           {...s.props}
-          {...(s.props?.dangerouslySetInnerHTML
-            ? {}
-            : { dangerouslySetInnerHTML: s.script })}
+          {...(s.props?.dangerouslySetInnerHTML ? {} : { dangerouslySetInnerHTML: s.script })}
         />
       ))}
     </>
-  );
-});
+  )
+})
