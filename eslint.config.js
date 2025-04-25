@@ -9,7 +9,7 @@ import tseslint from "typescript-eslint"
 
 export default [
   {
-    ignores: ["**/dist/**", "**/node_modules/**", ".stylelintrc.js"]
+    ignores: ["node_modules/*", "dist/*", "server/*", "tmp/*", ".stylelintrc.js", "vite.config.ts"]
   },
   {
     languageOptions: {
@@ -139,9 +139,9 @@ export default [
           ]
         }
       ],
-      "jsdoc/require-returns": ["off"],
+      "jsdoc/require-returns": ["error"],
       "jsdoc/require-param": [
-        "off",
+        "error",
         {
           checkDestructuredRoots: false
         }
@@ -166,6 +166,8 @@ export default [
         }
       ],
       "jsdoc/no-types": ["off"],
+      /** 関数の戻り値記述必須 */
+      "@typescript-eslint/explicit-function-return-type": "error",
       /** importの順番を種類ごとに統一する */
       "import/order": [
         "error",
@@ -196,8 +198,5 @@ export default [
       }
     }
   },
-  ...qwikEslint9Plugin.configs.recommended,
-  {
-    ignores: ["node_modules/*", "dist/*", "server/*", "tmp/*"]
-  }
+  ...qwikEslint9Plugin.configs.recommended
 ]

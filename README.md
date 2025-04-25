@@ -63,3 +63,5 @@ The production build will generate client and server modules by running both cli
 ```shell
 npm run build # or `yarn build`
 ```
+
+TODO: 開発時の自己証明書やhostsファイルについて記載。自己証明書だけで`https://localhost:5173`をSpotifyのAPIにリクエストする時の`redirect_uri`として指定すると`Insecure redirect URI`というエラーが返ってくるのでその対策。
