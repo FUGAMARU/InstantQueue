@@ -9,7 +9,7 @@ import tseslint from "typescript-eslint"
 
 export default [
   {
-    ignores: ["**/dist/**", "**/node_modules/**"]
+    ignores: ["**/dist/**", "**/node_modules/**", ".stylelintrc.js"]
   },
   {
     languageOptions: {

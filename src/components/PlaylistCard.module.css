@@ -1,34 +1,34 @@
 .playlistCard {
-  border-radius: 4px;
-  background-color: rgba(255, 32, 142, 0.8);
   padding: 6px;
+  background-color: rgb(255 32 142 / 80%);
+  border-radius: 4px;
 
   > .contents {
     position: relative;
 
     > .artwork {
-      border-radius: 4px;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
       width: 100%;
       height: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 4px;
     }
 
     > .title {
       position: absolute;
-      left: 0;
       right: 0;
       bottom: 0;
-      color: #fff;
-      font-size: 10px;
-      font-weight: bold;
-      background-color: rgba(255, 32, 142, 0.8);
-      backdrop-filter: blur(2px);
-      border-bottom-left-radius: 4px;
-      border-bottom-right-radius: 4px;
+      left: 0;
       display: grid;
       place-items: center;
       height: 16px;
+      font-size: 10px;
+      font-weight: bold;
+      color: #fff;
+      background-color: rgb(255 32 142 / 80%);
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 4px;
+      backdrop-filter: blur(2px);
     }
   }
 }
