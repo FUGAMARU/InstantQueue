@@ -1,0 +1,8 @@
+@import url("./variables.css");
+
+html,
+body {
+  line-height: 1;
+  color: var(--color-white);
+  background-color: var(--color-black);
+}

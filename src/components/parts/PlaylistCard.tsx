@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik"
 
-import styles from "@/components/PlaylistCard.module.css"
+import styles from "@/components/parts/PlaylistCard.module.css"
 
 export default component$(() => {
   return (

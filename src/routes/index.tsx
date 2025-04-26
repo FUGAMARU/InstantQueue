@@ -1,6 +1,7 @@
-import { $, component$ } from "@builder.io/qwik"
+import { $, component$, useContext } from "@builder.io/qwik"
 
-import PlaylistCard from "@/components/PlaylistCard"
+import PlaylistCard from "@/components/parts/PlaylistCard"
+import TopView from "@/components/views/TopView"
 import {
   SPOTIFY_PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY,
   SPOTIFY_PKCE_REDIRECT_URI,
@@ -8,10 +9,14 @@ import {
   SPOTIFY_API_SCOPES,
   SPOTIFY_CLIENT_ID
 } from "@/constants"
+import { TokenContext } from "@/token-context"
+import { isValidString } from "@/utils"
 
 import type { DocumentHead } from "@builder.io/qwik-city"
 
 export default component$(() => {
+  const accessToken = useContext(TokenContext)
+
   /**
    * PKCE認証フローを開始するための関数
    * routeLoaderを使ってサーバーサイドで処理する実装を試したが、ページリダイレクトがエラーが出てできなかったのでクライアントサイドで処理
@@ -50,19 +55,31 @@ export default component$(() => {
   })
 
   return (
-    <div>
-      <div style={{ width: 150, height: 150 }}>
-        <PlaylistCard />
-      </div>
-      <button onClick$={handleStartPKCE} type="button">
-        Start PKCE
-      </button>
+    <div style={{ width: "100vw", height: "100vh" }}>
+      {isValidString(accessToken.value) ? (
+        <div>
+          <div style={{ width: 150, height: 150 }}>
+            <PlaylistCard />
+          </div>
+          <button onClick$={handleStartPKCE} type="button">
+            Start PKCE
+          </button>
+          {accessToken.value}
+        </div>
+      ) : (
+        <>
+          <button onClick$={handleStartPKCE} type="button">
+            Start PKCE
+          </button>
+          <TopView />
+        </>
+      )}
     </div>
   )
 })
 
 export const head: DocumentHead = {
-  title: "Welcome to Qwik",
+  title: "InstantQueue",
   meta: [
     {
       name: "description",
