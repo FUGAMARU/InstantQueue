@@ -50,8 +50,11 @@
   },
   "dependencies": {
     "@fontsource/gabarito": "^5.2.5",
+    "@qwikest/icons": "^0.0.13",
     "@types/spotify-api": "^0.0.25",
     "axios": "^1.9.0",
-    "destyle.css": "^4.0.1"
+    "clsx": "^2.1.1",
+    "destyle.css": "^4.0.1",
+    "es-toolkit": "^1.36.0"
   }
 }

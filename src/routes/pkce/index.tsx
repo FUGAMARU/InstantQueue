@@ -21,7 +21,7 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     // クエリパラメーターのcodeを取得
-    const url = new URL(window.location.href)
+    const url = new URL(location.href)
     const code = url.searchParams.get("code")
     const codeVerifier = sessionStorage.getItem(SPOTIFY_PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY)
 
