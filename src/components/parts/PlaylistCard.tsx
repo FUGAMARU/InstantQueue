@@ -1,4 +1,5 @@
 import { component$ } from "@builder.io/qwik"
+import { BsCheckCircle } from "@qwikest/icons/bootstrap"
 import clsx from "clsx"
 
 import styles from "@/components/parts/PlaylistCard.module.css"
@@ -31,9 +32,11 @@ type Props = {
   thumbnail: string
   /** プレイリストのテーマカラー */
   themeColor: string
+  /** 選択されているかどうか */
+  isSelected?: boolean
 }
 
-export default component$(({ playlistId, name, thumbnail, themeColor }: Props) => {
+export default component$(({ name, thumbnail, themeColor, isSelected = false }: Props) => {
   return (
     <div class={styles.playlistCard} style={{ backgroundColor: `${themeColor}cc` }}>
       <div class={styles.contents}>
@@ -44,6 +47,14 @@ export default component$(({ playlistId, name, thumbnail, themeColor }: Props) =
           </span>
         </div>
       </div>
+
+      {isSelected && (
+        <div class={styles.overlay}>
+          <div class={styles.icon}>
+            <BsCheckCircle />
+          </div>
+        </div>
+      )}
     </div>
   )
 })
