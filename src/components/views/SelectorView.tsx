@@ -1,4 +1,4 @@
-import { component$, isServer, useContext, useStore, useTask$ } from "@builder.io/qwik"
+import { $, component$, isServer, useContext, useStore, useTask$ } from "@builder.io/qwik"
 import { Vibrant } from "node-vibrant/browser"
 
 import { getUserPlaylists } from "@/api"
@@ -8,12 +8,45 @@ import styles from "@/components/views/SelectorView.module.css"
 import { PLAYLIST_COLOR_FALLBACK } from "@/constants"
 import { TokenContext } from "@/token-context"
 
-import type PlaylistCard from "@/components/parts/PlaylistCard"
+import type { SelectedPlaylistsState } from "@/types"
 import type { PropsOf } from "@builder.io/qwik"
 
 export default component$(() => {
   const accessToken = useContext(TokenContext)
-  const playlists = useStore<Array<PropsOf<typeof PlaylistCard>>>([])
+  const playlists = useStore<PropsOf<typeof PlaylistGrid>["playlists"]>([])
+  const selectedPlaylistsState = useStore<SelectedPlaylistsState>(
+    playlists.map(playlist => ({
+      playlistId: playlist.playlistId,
+      isChecked: false
+    }))
+  )
+
+  /**
+   * プレイリストカードを押下した時の処理
+   *
+   * @param index - インデックス
+   */
+  const handlePlaylistCardClick$ = $((playlistId: string): void => {
+    const targetIndex = selectedPlaylistsState.findIndex(
+      selectedPlaylist => selectedPlaylist.playlistId === playlistId
+    )
+
+    selectedPlaylistsState[targetIndex].isChecked = !selectedPlaylistsState[targetIndex].isChecked
+  })
+
+  /** Enqueueボタンを押下した時の処理 */
+  const handleEnqueueButtonClick$ = $((): void => {
+    console.log("チェックされているプレイリストの一覧")
+    const checkedPlaylistIdList = selectedPlaylistsState
+      .filter(playlist => playlist.isChecked)
+      .map(playlist => playlist.playlistId)
+    console.log(checkedPlaylistIdList)
+  })
+
+  /** Reset Queueボタンを押下した時の処理 */
+  const handleResetQueueButtonClick$ = $((): void => {
+    console.log("Reset Queue button clicked")
+  })
 
   useTask$(async () => {
     if (isServer) {
@@ -28,10 +61,18 @@ export default component$(() => {
         return {
           ...playlist,
           themeColor: vibrantColor ?? PLAYLIST_COLOR_FALLBACK
-        } satisfies PropsOf<typeof PlaylistCard>
+        }
       })
     )
     Object.assign(playlists, playlistsWithThemeColor)
+
+    Object.assign(
+      selectedPlaylistsState,
+      playlistsWithThemeColor.map(playlist => ({
+        playlistId: playlist.playlistId,
+        isChecked: false
+      }))
+    )
   })
 
   return (
@@ -54,10 +95,17 @@ export default component$(() => {
       </div>
 
       <div class={styles.grid}>
-        <PlaylistGrid playlists={playlists} />
+        <PlaylistGrid
+          onPlaylistCardClick$={handlePlaylistCardClick$}
+          playlists={playlists}
+          selectedPlaylistsStateStore={selectedPlaylistsState}
+        />
       </div>
 
-      <ActionFooter />
+      <ActionFooter
+        onEnqueueButtonClick$={handleEnqueueButtonClick$}
+        onResetQueueButtonClick$={handleResetQueueButtonClick$}
+      />
     </div>
   )
 })

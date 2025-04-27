@@ -6,8 +6,7 @@ import axios from "axios"
 
 import { SPOTIFY_CLIENT_ID, SPOTIFY_PKCE_REDIRECT_URI } from "@/constants"
 
-import type PlaylistCard from "@/components/parts/PlaylistCard"
-import type { PropsOf } from "@builder.io/qwik"
+import type { Playlist } from "@/types"
 
 /** API接続する時に使用するAxiosのインスタンス */
 const spotifyApi = axios.create({
@@ -83,7 +82,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<AccessTo
  */
 export const getUserPlaylists = async (
   accessToken: string
-): Promise<Array<Omit<PropsOf<typeof PlaylistCard>, "themeColor">>> => {
+): Promise<Array<Omit<Playlist, "themeColor">>> => {
   const { data } = await axios.get<SpotifyApi.ListOfCurrentUsersPlaylistsResponse>(
     "https://api.spotify.com/v1/me/playlists?limit=50",
     {

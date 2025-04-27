@@ -4,6 +4,9 @@ import clsx from "clsx"
 
 import styles from "@/components/parts/PlaylistCard.module.css"
 
+import type { Playlist } from "@/types"
+import type { PropFunction } from "@builder.io/qwik"
+
 /**
  * 背景色から文字色を白にするべきかを判定する
  * 参考: https://zenn.dev/mryhryki/articles/2020-11-12-hatena-background-color
@@ -23,38 +26,39 @@ const determineWhiteTextColor = (backgroundColorCode: string): boolean => {
 }
 
 /** Props */
-type Props = {
-  /** プレイリストID */
-  playlistId: string
-  /** プレイリスト名 */
-  name: string
-  /** プレイリストのサムネイルURL */
-  thumbnail: string
-  /** プレイリストのテーマカラー */
-  themeColor: string
+type Props = Omit<Playlist, "playlistId"> & {
   /** 選択されているかどうか */
   isSelected?: boolean
+  /** 押下した時の処理 */
+  onClick$: PropFunction<() => void>
 }
 
-export default component$(({ name, thumbnail, themeColor, isSelected = false }: Props) => {
-  return (
-    <div class={styles.playlistCard} style={{ backgroundColor: `${themeColor}cc` }}>
-      <div class={styles.contents}>
-        <img alt={name} class={styles.artwork} height={138} src={thumbnail} width={138} />
-        <div class={styles.title} style={{ backgroundColor: `${themeColor}cc` }}>
-          <span class={clsx(styles.inner, !determineWhiteTextColor(themeColor) && styles.Black)}>
-            {name}
-          </span>
-        </div>
-      </div>
-
-      {isSelected && (
-        <div class={styles.overlay}>
-          <div class={styles.icon}>
-            <BsCheckCircle />
+export default component$(
+  ({ name, thumbnail, themeColor, isSelected = false, onClick$: handleClick$ }: Props) => {
+    return (
+      <button
+        class={styles.playlistCard}
+        onClick$={handleClick$}
+        style={{ backgroundColor: `${themeColor}cc` }}
+        type="button"
+      >
+        <div class={styles.contents}>
+          <img alt={name} class={styles.artwork} height={138} src={thumbnail} width={138} />
+          <div class={styles.title} style={{ backgroundColor: `${themeColor}cc` }}>
+            <span class={clsx(styles.inner, !determineWhiteTextColor(themeColor) && styles.Black)}>
+              {name}
+            </span>
           </div>
         </div>
-      )}
-    </div>
-  )
-})
+
+        {isSelected && (
+          <div class={styles.overlay}>
+            <div class={styles.icon}>
+              <BsCheckCircle />
+            </div>
+          </div>
+        )}
+      </button>
+    )
+  }
+)

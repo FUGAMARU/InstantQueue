@@ -199,7 +199,7 @@ export default [
     }
   },
   {
-    files: ["src/constants.ts", "src/utils.ts", "src/api.ts"],
+    files: ["src/constants.ts", "src/utils.ts", "src/api.ts", "src/types.ts"],
     rules: {
       /** 関数の戻り値記述必須 */
       "@typescript-eslint/explicit-function-return-type": "error",

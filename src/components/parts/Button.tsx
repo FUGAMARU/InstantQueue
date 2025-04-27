@@ -6,7 +6,7 @@ import { capitalize } from "es-toolkit"
 
 import styles from "@/components/parts/Button.module.css"
 
-import type { JSXOutput, PropFunction } from "@builder.io/qwik"
+import type { JSXOutput, QRL } from "@builder.io/qwik"
 
 /** アイコン一覧 */
 type Icon = "spotify" | "add" | "cross"
@@ -20,7 +20,7 @@ type Props = {
   /** アイコン */
   icon: Icon
   /** 押下した時の処理 */
-  onClick$: PropFunction<() => void>
+  onClick$: QRL<() => void>
   /** 大きめに表示するかどうか */
   isLarger?: boolean
 }
