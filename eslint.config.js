@@ -198,5 +198,23 @@ export default [
       }
     }
   },
+  {
+    files: ["src/constants.ts", "src/utils.ts", "src/api.ts"],
+    rules: {
+      /** 関数の戻り値記述必須 */
+      "@typescript-eslint/explicit-function-return-type": "error",
+      /** JSDocにおける戻り値の記述必須 */
+      "jsdoc/require-returns": ["error"],
+      /** JSDocにおける引数の記述必須 */
+      "jsdoc/require-param": [
+        "error",
+        {
+          checkDestructuredRoots: false
+        }
+      ],
+      /** JSDocにおけるそのファイルに関する説明の記述必須 */
+      "jsdoc/require-file-overview": ["error"]
+    }
+  },
   ...qwikEslint9Plugin.configs.recommended
 ]

@@ -1,3 +1,7 @@
+/**
+ * @file 定数を定義するファイル
+ */
+
 /** Spotify AppのClient ID */
 export const SPOTIFY_CLIENT_ID = import.meta.env.PUBLIC_SPOTIFY_CLIENT_ID
 
