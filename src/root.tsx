@@ -5,7 +5,6 @@ import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from "@builder.
 import "destyle.css"
 import "@/styles/global.css"
 import "@fontsource/gabarito/400.css"
-import "@fontsource/gabarito/500.css"
 import "@fontsource/gabarito/700.css"
 import { RouterHead } from "@/components/router-head/router-head"
 import { TokenContext } from "@/token-context"

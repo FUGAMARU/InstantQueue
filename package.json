@@ -26,11 +26,11 @@
     "@builder.io/qwik": "^1.13.0",
     "@builder.io/qwik-city": "^1.13.0",
     "@eslint/js": "^9.25.1",
+    "@qwikest/icons": "^0.0.13",
     "@types/eslint": "8.56.10",
     "@types/node": "20.14.11",
     "@typescript-eslint/eslint-plugin": "7.16.1",
     "@typescript-eslint/parser": "7.16.1",
-    "@qwikest/icons": "^0.0.13",
     "eslint": "8.57.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-import-resolver-typescript": "^4.3.4",
@@ -55,6 +55,7 @@
     "axios": "^1.9.0",
     "clsx": "^2.1.1",
     "destyle.css": "^4.0.1",
-    "es-toolkit": "^1.36.0"
+    "es-toolkit": "^1.36.0",
+    "node-vibrant": "^4.0.3"
   }
 }

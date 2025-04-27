@@ -6,6 +6,9 @@ import axios from "axios"
 
 import { SPOTIFY_CLIENT_ID, SPOTIFY_PKCE_REDIRECT_URI } from "@/constants"
 
+import type PlaylistCard from "@/components/parts/PlaylistCard"
+import type { PropsOf } from "@builder.io/qwik"
+
 /** API接続する時に使用するAxiosのインスタンス */
 const spotifyApi = axios.create({
   baseURL: "https://accounts.spotify.com/api",
@@ -70,4 +73,29 @@ export const refreshAccessToken = async (refreshToken: string): Promise<AccessTo
     accessToken: data.access_token,
     refreshToken: data.refresh_token
   }
+}
+
+/**
+ * ユーザーのプレイリスト一覧を取得する
+ *
+ * @param accessToken - アクセストークン
+ * @returns プレイリスト一覧
+ */
+export const getUserPlaylists = async (
+  accessToken: string
+): Promise<Array<Omit<PropsOf<typeof PlaylistCard>, "themeColor">>> => {
+  const { data } = await axios.get<SpotifyApi.ListOfCurrentUsersPlaylistsResponse>(
+    "https://api.spotify.com/v1/me/playlists?limit=50",
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    }
+  )
+
+  return data.items.map(item => ({
+    playlistId: item.id,
+    name: item.name,
+    thumbnail: item.images[0]?.url ?? ""
+  }))
 }

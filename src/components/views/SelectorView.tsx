@@ -1,8 +1,38 @@
-import { component$ } from "@builder.io/qwik"
+import { component$, isServer, useContext, useStore, useTask$ } from "@builder.io/qwik"
+import { Vibrant } from "node-vibrant/browser"
 
+import { getUserPlaylists } from "@/api"
+import PlaylistGrid from "@/components/templates/PlaylistGrid"
 import styles from "@/components/views/SelectorView.module.css"
+import { PLAYLIST_COLOR_FALLBACK } from "@/constants"
+import { TokenContext } from "@/token-context"
+
+import type PlaylistCard from "@/components/parts/PlaylistCard"
+import type { PropsOf } from "@builder.io/qwik"
 
 export default component$(() => {
+  const accessToken = useContext(TokenContext)
+  const playlists = useStore<Array<PropsOf<typeof PlaylistCard>>>([])
+
+  useTask$(async () => {
+    if (isServer) {
+      return
+    }
+
+    const userPlaylists = await getUserPlaylists(accessToken.value)
+    const playlistsWithThemeColor = await Promise.all(
+      userPlaylists.map(async playlist => {
+        const palette = await Vibrant.from(playlist.thumbnail).getPalette()
+        const vibrantColor = palette.Vibrant?.hex
+        return {
+          ...playlist,
+          themeColor: vibrantColor ?? PLAYLIST_COLOR_FALLBACK
+        } satisfies PropsOf<typeof PlaylistCard>
+      })
+    )
+    Object.assign(playlists, playlistsWithThemeColor)
+  })
+
   return (
     <div class={styles.selectorView}>
       <div class={styles.header}>
@@ -21,6 +51,8 @@ export default component$(() => {
           FUGAMARU !
         </h1>
       </div>
+
+      <PlaylistGrid playlists={playlists} />
     </div>
   )
 })
