@@ -1,7 +1,6 @@
 .topView {
   display: grid;
   place-items: center;
-  width: 100%;
   height: 100%;
 
   > .main {
@@ -15,6 +14,7 @@
       flex-direction: column;
       gap: 16px;
       align-items: center;
+      font-family: Gabarito, sans-serif;
 
       > .title {
         font-size: 36px;
@@ -23,6 +23,7 @@
 
       > .description {
         font-size: 14px;
+        color: var(--color-gray);
       }
     }
 

@@ -1,6 +1,7 @@
 import { component$, useContext } from "@builder.io/qwik"
 
 import PlaylistCard from "@/components/parts/PlaylistCard"
+import SelectorView from "@/components/views/SelectorView"
 import TopView from "@/components/views/TopView"
 import { TokenContext } from "@/token-context"
 import { isValidString } from "@/utils"
@@ -21,7 +22,7 @@ export default component$(() => {
           {accessToken.value}
         </div>
       ) : (
-        <TopView />
+        <SelectorView />
       )}
     </div>
   )
