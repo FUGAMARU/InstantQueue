@@ -1,5 +1,6 @@
 import { component$ } from "@builder.io/qwik"
-import { BsSpotify, BsArrowRight, BsX } from "@qwikest/icons/bootstrap"
+import { BsSpotify } from "@qwikest/icons/bootstrap"
+import { TbMoodPlus, TbMoodWrrr } from "@qwikest/icons/tablericons"
 import clsx from "clsx"
 import { capitalize } from "es-toolkit"
 
@@ -28,8 +29,8 @@ export default component$(
   ({ color, label, icon, onClick$: handleClick$, isLarger = false }: Props) => {
     const iconMap = {
       spotify: <BsSpotify />,
-      add: <BsArrowRight />,
-      cross: <BsX />
+      add: <TbMoodPlus />,
+      cross: <TbMoodWrrr />
     } as const satisfies Record<Icon, JSXOutput>
 
     return (
@@ -39,7 +40,7 @@ export default component$(
         type="button"
       >
         <span class={clsx(styles.label, isLarger && styles.Larger)}>{label}</span>
-        <span class={clsx(styles.icon, isLarger && styles.Larger)}>{iconMap[icon]}</span>
+        <span class={styles.icon}>{iconMap[icon]}</span>
       </button>
     )
   }

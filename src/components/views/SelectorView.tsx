@@ -2,6 +2,7 @@ import { component$, isServer, useContext, useStore, useTask$ } from "@builder.i
 import { Vibrant } from "node-vibrant/browser"
 
 import { getUserPlaylists } from "@/api"
+import ActionFooter from "@/components/templates/ActionFooter"
 import PlaylistGrid from "@/components/templates/PlaylistGrid"
 import styles from "@/components/views/SelectorView.module.css"
 import { PLAYLIST_COLOR_FALLBACK } from "@/constants"
@@ -52,7 +53,11 @@ export default component$(() => {
         </h1>
       </div>
 
-      <PlaylistGrid playlists={playlists} />
+      <div class={styles.grid}>
+        <PlaylistGrid playlists={playlists} />
+      </div>
+
+      <ActionFooter />
     </div>
   )
 })
