@@ -21,5 +21,8 @@ export const SPOTIFY_PKCE_REDIRECT_URI = "https://local.dev:5173/pkce"
 /** Spotify APIのリフレッシュトークンをLocalStorageに保存しておく時のキー (アクセストークンはInMemory) */
 export const SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY = "refresh_token"
 
+/** Spotify APIからユーザー名を取得できなかった時のフォールバックユーザー名 */
+export const SPOTIFY_USERNAME_FALLBACK = "User"
+
 /** プレイリストのサムネイルからテーマカラーを取得できなかった時のフォールバック色 */
 export const PLAYLIST_COLOR_FALLBACK = "#212121"

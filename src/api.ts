@@ -4,7 +4,11 @@
 
 import axios from "axios"
 
-import { SPOTIFY_CLIENT_ID, SPOTIFY_PKCE_REDIRECT_URI } from "@/constants"
+import {
+  SPOTIFY_CLIENT_ID,
+  SPOTIFY_PKCE_REDIRECT_URI,
+  SPOTIFY_USERNAME_FALLBACK
+} from "@/constants"
 
 import type { Playlist } from "@/types"
 
@@ -13,6 +17,26 @@ const spotifyApi = axios.create({
   baseURL: "https://accounts.spotify.com/api",
   headers: {
     "Content-Type": "application/x-www-form-urlencoded"
+  }
+})
+
+/**
+ * Bearerトークン付きのリクエストヘッダーを取得する
+ *
+ * @param accessToken - アクセストークン
+ * @returns Bearerトークン付きのリクエストヘッダー
+ */
+const getBearerTokenHeader = (
+  accessToken: string
+): {
+  /** リクエストヘッダー */
+  headers: {
+    /** Authorization */
+    Authorization: string
+  }
+} => ({
+  headers: {
+    Authorization: `Bearer ${accessToken}`
   }
 })
 
@@ -85,11 +109,7 @@ export const getUserPlaylists = async (
 ): Promise<Array<Omit<Playlist, "themeColor">>> => {
   const { data } = await axios.get<SpotifyApi.ListOfCurrentUsersPlaylistsResponse>(
     "https://api.spotify.com/v1/me/playlists?limit=50",
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    }
+    getBearerTokenHeader(accessToken)
   )
 
   return data.items.map(item => ({
@@ -97,4 +117,19 @@ export const getUserPlaylists = async (
     name: item.name,
     thumbnail: item.images[0]?.url ?? ""
   }))
+}
+
+/**
+ * アカウントのユーザー名を取得する
+ *
+ * @param accessToken - アクセストークン
+ * @returns ユーザー名
+ */
+export const getUserName = async (accessToken: string): Promise<string> => {
+  const { data } = await axios.get<SpotifyApi.CurrentUsersProfileResponse>(
+    "https://api.spotify.com/v1/me",
+    getBearerTokenHeader(accessToken)
+  )
+
+  return data.display_name ?? SPOTIFY_USERNAME_FALLBACK
 }

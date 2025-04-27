@@ -1,7 +1,15 @@
-import { $, component$, isServer, useContext, useStore, useTask$ } from "@builder.io/qwik"
+import {
+  $,
+  component$,
+  isServer,
+  useContext,
+  useSignal,
+  useStore,
+  useTask$
+} from "@builder.io/qwik"
 import { Vibrant } from "node-vibrant/browser"
 
-import { getUserPlaylists } from "@/api"
+import { getUserName, getUserPlaylists } from "@/api"
 import ActionFooter from "@/components/templates/ActionFooter"
 import PlaylistGrid from "@/components/templates/PlaylistGrid"
 import styles from "@/components/views/SelectorView.module.css"
@@ -13,6 +21,7 @@ import type { PropsOf } from "@builder.io/qwik"
 
 export default component$(() => {
   const accessToken = useContext(TokenContext)
+  const userName = useSignal("")
   const playlists = useStore<PropsOf<typeof PlaylistGrid>["playlists"]>([])
   const selectedPlaylistsState = useStore<SelectedPlaylistsState>(
     playlists.map(playlist => ({
@@ -64,8 +73,8 @@ export default component$(() => {
         }
       })
     )
-    Object.assign(playlists, playlistsWithThemeColor)
 
+    Object.assign(playlists, playlistsWithThemeColor)
     Object.assign(
       selectedPlaylistsState,
       playlistsWithThemeColor.map(playlist => ({
@@ -73,6 +82,9 @@ export default component$(() => {
         isChecked: false
       }))
     )
+
+    const userNameResponse = await getUserName(accessToken.value)
+    userName.value = userNameResponse
   })
 
   return (
@@ -90,7 +102,7 @@ export default component$(() => {
         <h1 class={styles.title}>
           Welcome back,
           <br />
-          FUGAMARU !
+          {userName.value} !
         </h1>
       </div>
 
