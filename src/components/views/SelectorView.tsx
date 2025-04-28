@@ -93,6 +93,16 @@ export default component$(({ accessToken }: Props) => {
 
   /** Resetボタンを押下した時の処理 */
   const handleResetButtonClick$ = $(async (): Promise<void> => {
+    Object.assign(
+      selectedPlaylistsState,
+      selectedPlaylistsState.map(playlist => ({
+        playlistId: playlist.playlistId,
+        isChecked: false
+      }))
+    )
+
+    localStorage.removeItem(SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY)
+
     const temporaryPlaylistId = localStorage.getItem(
       SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
     )
