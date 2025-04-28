@@ -8,10 +8,6 @@
   font-family: Gabarito, sans-serif;
   border-radius: 20px;
 
-  &.Larger {
-    height: 50px;
-  }
-
   &.Blue {
     background: var(--color-gradient-blue);
   }
@@ -29,10 +25,6 @@
     font-size: 16px;
     font-weight: 700;
     text-box: trim-both cap alphabetic;
-
-    &.Larger {
-      font-size: 18px;
-    }
   }
 
   > .icon {

@@ -60,7 +60,6 @@ export default component$(() => {
           <Button
             color="green"
             icon="spotify"
-            isLarger
             label="Sign-In with Spotify"
             onClick$={handleStartPKCE}
           />

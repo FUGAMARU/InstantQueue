@@ -1,7 +1,9 @@
 .playlistCard {
+  --radius: 16px;
+
   position: relative;
-  padding: 6px;
-  border-radius: 4px;
+  padding: 7px; /* 中途半端な値だけどこれが一番しっくり来た */
+  border-radius: var(--radius);
 
   > .contents {
     position: relative;
@@ -11,7 +13,7 @@
       height: 100%;
       aspect-ratio: 1 / 1;
       object-fit: cover;
-      border-radius: 4px;
+      border-radius: var(--radius);
     }
 
     > .title {
@@ -22,11 +24,11 @@
       display: grid;
       place-items: center;
       height: 16px;
-      padding: 0 4px;
+      padding: 0 12px;
       font-size: 10px;
       font-weight: bold;
-      border-bottom-right-radius: 4px;
-      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: var(--radius);
+      border-bottom-left-radius: var(--radius);
       backdrop-filter: blur(2px);
 
       > .inner {
@@ -48,6 +50,7 @@
     display: grid;
     place-items: center;
     background-color: var(--color-gray-alpha);
+    border-radius: var(--radius);
 
     > .icon {
       font-size: 48px;

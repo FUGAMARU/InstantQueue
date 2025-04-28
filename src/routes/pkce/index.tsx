@@ -2,10 +2,7 @@ import { component$, useContext, useVisibleTask$ } from "@builder.io/qwik"
 import { useNavigate } from "@builder.io/qwik-city"
 
 import { spotifyAccountsApiFunctions } from "@/api"
-import {
-  SPOTIFY_PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY,
-  SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY
-} from "@/constants"
+import { WEB_STORAGE } from "@/constants"
 import { TokenContext } from "@/token-context"
 import { isDefined } from "@/utils"
 
@@ -19,7 +16,7 @@ export default component$(() => {
     // クエリパラメーターのcodeを取得
     const url = new URL(location.href)
     const code = url.searchParams.get("code")
-    const codeVerifier = sessionStorage.getItem(SPOTIFY_PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY)
+    const codeVerifier = sessionStorage.getItem(WEB_STORAGE.PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY)
 
     if (!isDefined(code) || !isDefined(codeVerifier)) {
       navigate("/")
@@ -30,8 +27,8 @@ export default component$(() => {
     const tokenInfo = await spotifyAccountsApi.getAccessToken(code, codeVerifier)
 
     accessToken.value = tokenInfo.accessToken
-    localStorage.setItem(SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY, tokenInfo.refreshToken)
-    sessionStorage.removeItem(SPOTIFY_PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY)
+    localStorage.setItem(WEB_STORAGE.REFRESH_TOKEN_LOCAL_STORAGE_KEY, tokenInfo.refreshToken)
+    sessionStorage.removeItem(WEB_STORAGE.PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY)
     navigate("/")
   })
 

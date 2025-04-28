@@ -5,7 +5,6 @@
   flex-direction: column;
   margin-right: calc(((100vw - 100%) / 2) * -1);
   margin-left: calc(((100vw - 100%) / 2) * -1);
-  backdrop-filter: blur(2px);
 
   > .overlay {
     height: 32px;
@@ -17,6 +16,7 @@
     justify-content: space-around;
     padding: 8px 24px 32px;
     background: var(--color-black-90);
+    backdrop-filter: blur(2px);
 
     > .button {
       width: 150px;
