@@ -1,6 +1,6 @@
 import { component$, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik"
 
-import { refreshAccessToken } from "@/api"
+import { spotifyAccountsApiFunctions } from "@/api"
 import SelectorView from "@/components/views/SelectorView"
 import TopView from "@/components/views/TopView"
 import { SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY } from "@/constants"
@@ -27,7 +27,8 @@ export default component$(() => {
      * @param refreshToken - リフレッシュトークン
      */
     const refreshAndSetAccessToken = async (refreshToken: string): Promise<void> => {
-      const accessTokenInfo = await refreshAccessToken(refreshToken)
+      const spotifyAccountsApi = await spotifyAccountsApiFunctions()
+      const accessTokenInfo = await spotifyAccountsApi.refreshAccessToken(refreshToken)
       accessToken.value = accessTokenInfo.accessToken
       localStorage.setItem(SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY, accessTokenInfo.refreshToken)
     }

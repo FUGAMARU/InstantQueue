@@ -1,7 +1,7 @@
 import { component$, useContext, useVisibleTask$ } from "@builder.io/qwik"
 import { useNavigate } from "@builder.io/qwik-city"
 
-import { getAccessToken } from "@/api"
+import { spotifyAccountsApiFunctions } from "@/api"
 import {
   SPOTIFY_PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY,
   SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY
@@ -26,7 +26,8 @@ export default component$(() => {
       return
     }
 
-    const tokenInfo = await getAccessToken(code, codeVerifier)
+    const spotifyAccountsApi = await spotifyAccountsApiFunctions()
+    const tokenInfo = await spotifyAccountsApi.getAccessToken(code, codeVerifier)
 
     accessToken.value = tokenInfo.accessToken
     localStorage.setItem(SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY, tokenInfo.refreshToken)

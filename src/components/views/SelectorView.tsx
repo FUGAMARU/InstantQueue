@@ -11,12 +11,8 @@ import { shuffle } from "es-toolkit"
 import { Vibrant } from "node-vibrant/browser"
 
 import {
-  createTemporaryPlaylistAndSetTracks,
-  deletePlaylist,
-  getPlaylistTracks,
-  getUserName,
-  getUserPlaylists,
-  startPlaylistPlayback
+  spotifyApiFunctions
+  // startPlaylistPlayback
 } from "@/api"
 import ActionFooter from "@/components/templates/ActionFooter"
 import PlaylistGrid from "@/components/templates/PlaylistGrid"
@@ -33,6 +29,7 @@ import type { PropsOf } from "@builder.io/qwik"
 
 export default component$(() => {
   const accessToken = useContext(TokenContext)
+  const unresolvedSpotifyApi = spotifyApiFunctions(accessToken.value)
   const userName = useSignal("")
   const playlists = useStore<PropsOf<typeof PlaylistGrid>["playlists"]>([])
   const selectedPlaylistsState = useStore<SelectedPlaylistsState>(
@@ -57,6 +54,8 @@ export default component$(() => {
 
   /** Enqueueボタンを押下した時の処理 */
   const handleEnqueueButtonClick$ = $(async (): Promise<void> => {
+    const spotifyApi = await unresolvedSpotifyApi
+
     // 選択されているプレイリストIDの一覧を取得
     const checkedPlaylistIdList = selectedPlaylistsState
       .filter(playlist => playlist.isChecked)
@@ -64,7 +63,7 @@ export default component$(() => {
 
     // 選択されているプレイリストに含まれている全ての楽曲のURIを取得
     const allTrackUriList = await Promise.all(
-      checkedPlaylistIdList.map(playlistId => getPlaylistTracks(accessToken.value, playlistId))
+      checkedPlaylistIdList.map(playlistId => spotifyApi.getPlaylistTracks(playlistId))
     )
 
     // 取得した楽曲のURIをランダムに並べ替える
@@ -72,7 +71,7 @@ export default component$(() => {
 
     // ランダムに並べ替えた楽曲のURIをセットした一時的なプレイリストを作成
     const { id: createdTemporaryPlaylistId, uri: createdTemporaryPlaylistUri } =
-      await createTemporaryPlaylistAndSetTracks(accessToken.value, shuffledTrackUriList)
+      await spotifyApi.createTemporaryPlaylistAndSetTracks(shuffledTrackUriList)
 
     localStorage.setItem(
       SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY,
@@ -80,7 +79,7 @@ export default component$(() => {
     )
 
     // 再生開始
-    await startPlaylistPlayback(accessToken.value, createdTemporaryPlaylistUri)
+    await spotifyApi.startPlaylistPlayback(createdTemporaryPlaylistUri)
   })
 
   /** Resetボタンを押下した時の処理 */
@@ -95,7 +94,8 @@ export default component$(() => {
 
     localStorage.removeItem(SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY)
 
-    await deletePlaylist(accessToken.value, temporaryPlaylistId)
+    const spotifyApi = await unresolvedSpotifyApi
+    await spotifyApi.deletePlaylist(temporaryPlaylistId)
   })
 
   useTask$(async () => {
@@ -103,7 +103,9 @@ export default component$(() => {
       return
     }
 
-    const userPlaylists = await getUserPlaylists(accessToken.value)
+    const spotifyApi = await unresolvedSpotifyApi
+
+    const userPlaylists = await spotifyApi.getUserPlaylists()
     const playlistsWithThemeColor = await Promise.all(
       userPlaylists.map(async playlist => {
         const palette = await Vibrant.from(playlist.thumbnail).getPalette()
@@ -124,7 +126,7 @@ export default component$(() => {
       }))
     )
 
-    const userNameResponse = await getUserName(accessToken.value)
+    const userNameResponse = await spotifyApi.getUserName()
     userName.value = userNameResponse
   })
 
