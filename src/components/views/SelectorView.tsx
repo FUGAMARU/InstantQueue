@@ -7,13 +7,23 @@ import {
   useStore,
   useTask$
 } from "@builder.io/qwik"
+import { shuffle } from "es-toolkit"
 import { Vibrant } from "node-vibrant/browser"
 
-import { getUserName, getUserPlaylists } from "@/api"
+import {
+  createTemporaryPlaylistAndSetTracks,
+  getPlaylistTracks,
+  getUserName,
+  getUserPlaylists,
+  startPlaylistPlayback
+} from "@/api"
 import ActionFooter from "@/components/templates/ActionFooter"
 import PlaylistGrid from "@/components/templates/PlaylistGrid"
 import styles from "@/components/views/SelectorView.module.css"
-import { PLAYLIST_COLOR_FALLBACK } from "@/constants"
+import {
+  PLAYLIST_COLOR_FALLBACK,
+  SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
+} from "@/constants"
 import { TokenContext } from "@/token-context"
 
 import type { SelectedPlaylistsState } from "@/types"
@@ -44,12 +54,31 @@ export default component$(() => {
   })
 
   /** Enqueueボタンを押下した時の処理 */
-  const handleEnqueueButtonClick$ = $((): void => {
-    console.log("チェックされているプレイリストの一覧")
+  const handleEnqueueButtonClick$ = $(async (): Promise<void> => {
+    // 選択されているプレイリストIDの一覧を取得
     const checkedPlaylistIdList = selectedPlaylistsState
       .filter(playlist => playlist.isChecked)
       .map(playlist => playlist.playlistId)
-    console.log(checkedPlaylistIdList)
+
+    // 選択されているプレイリストに含まれている全ての楽曲のURIを取得
+    const allTrackUriList = await Promise.all(
+      checkedPlaylistIdList.map(playlistId => getPlaylistTracks(accessToken.value, playlistId))
+    )
+
+    // 取得した楽曲のURIをランダムに並べ替える
+    const shuffledTrackUriList = shuffle(allTrackUriList.flatMap(trackUriList => trackUriList))
+
+    // ランダムに並べ替えた楽曲のURIをセットした一時的なプレイリストを作成
+    const { id: createdTemporaryPlaylistId, uri: createdTemporaryPlaylistUri } =
+      await createTemporaryPlaylistAndSetTracks(accessToken.value, shuffledTrackUriList)
+
+    localStorage.setItem(
+      SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY,
+      createdTemporaryPlaylistId
+    )
+
+    // 再生開始
+    await startPlaylistPlayback(accessToken.value, createdTemporaryPlaylistUri)
   })
 
   /** Reset Queueボタンを押下した時の処理 */

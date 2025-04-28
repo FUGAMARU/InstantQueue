@@ -10,7 +10,7 @@ export const SPOTIFY_API_ENDPOINT_AUTH = "https://accounts.spotify.com/authorize
 
 /** Spotify APIの要求スコープ */
 export const SPOTIFY_API_SCOPES =
-  "playlist-read-private playlist-read-collaborative user-read-email user-modify-playback-state"
+  "playlist-read-private playlist-modify-private playlist-read-collaborative user-read-email user-modify-playback-state"
 
 /** PKCEの認証フローにてCodeVerifierをSessionStorageに保持しておく時のキー */
 export const SPOTIFY_PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY = "code_verifier"
@@ -20,6 +20,12 @@ export const SPOTIFY_PKCE_REDIRECT_URI = "https://local.dev:5173/pkce"
 
 /** Spotify APIのリフレッシュトークンをLocalStorageに保存しておく時のキー (アクセストークンはInMemory) */
 export const SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY = "refresh_token"
+
+/** 一時的なプレイリストを作成する時のプレイリスト名 */
+export const SPOTIFY_TEMPORARY_PLAYLIST_NAME = "InstantQueue Temporary Playlist"
+
+/** 一時的なプレイリストのIDをLocalStorageに保存しておく時のキー */
+export const SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY = "temporary_playlist_id"
 
 /** Spotify APIからユーザー名を取得できなかった時のフォールバックユーザー名 */
 export const SPOTIFY_USERNAME_FALLBACK = "User"
