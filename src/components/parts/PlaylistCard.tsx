@@ -1,7 +1,7 @@
 import { component$ } from "@builder.io/qwik"
-import { BsCheckCircle } from "@qwikest/icons/bootstrap"
 import clsx from "clsx"
 
+import Icon from "@/components/icons/Icon"
 import styles from "@/components/parts/PlaylistCard.module.css"
 
 import type { Playlist } from "@/types"
@@ -54,7 +54,7 @@ export default component$(
         {isSelected && (
           <div class={styles.overlay}>
             <div class={styles.icon}>
-              <BsCheckCircle />
+              <Icon name="check" />
             </div>
           </div>
         )}

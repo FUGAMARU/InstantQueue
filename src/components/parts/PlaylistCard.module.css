@@ -27,6 +27,7 @@
       padding: 0 12px;
       font-size: 10px;
       font-weight: bold;
+      word-break: break-all;
       border-bottom-right-radius: var(--radius);
       border-bottom-left-radius: var(--radius);
       backdrop-filter: blur(2px);
@@ -53,7 +54,9 @@
     border-radius: var(--radius);
 
     > .icon {
-      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      fill: var(--color-white);
     }
   }
 }

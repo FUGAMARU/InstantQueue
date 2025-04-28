@@ -1,15 +1,11 @@
 import { component$ } from "@builder.io/qwik"
-import { BsSpotify } from "@qwikest/icons/bootstrap"
-import { TbMoodPlus, TbMoodWrrr } from "@qwikest/icons/tablericons"
 import clsx from "clsx"
 import { capitalize } from "es-toolkit"
 
+import Icon from "@/components/icons/Icon"
 import styles from "@/components/parts/Button.module.css"
 
-import type { JSXOutput, QRL } from "@builder.io/qwik"
-
-/** アイコン一覧 */
-type Icon = "spotify" | "add" | "cross"
+import type { PropsOf, QRL } from "@builder.io/qwik"
 
 /** Props */
 type Props = {
@@ -18,18 +14,12 @@ type Props = {
   /** ラベル */
   label: string
   /** アイコン */
-  icon: Icon
+  iconName: PropsOf<typeof Icon>["name"]
   /** 押下した時の処理 */
   onClick$: QRL<() => void>
 }
 
-export default component$(({ color, label, icon, onClick$: handleClick$ }: Props) => {
-  const iconMap = {
-    spotify: <BsSpotify />,
-    add: <TbMoodPlus />,
-    cross: <TbMoodWrrr />
-  } as const satisfies Record<Icon, JSXOutput>
-
+export default component$(({ color, label, iconName, onClick$: handleClick$ }: Props) => {
   return (
     <button
       class={clsx(styles.buttonTag, styles[capitalize(color)])}
@@ -37,7 +27,9 @@ export default component$(({ color, label, icon, onClick$: handleClick$ }: Props
       type="button"
     >
       <span class={styles.label}>{label}</span>
-      <span class={styles.icon}>{iconMap[icon]}</span>
+      <span class={styles.icon}>
+        <Icon name={iconName} />
+      </span>
     </button>
   )
 })

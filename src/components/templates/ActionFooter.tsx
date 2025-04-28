@@ -23,11 +23,16 @@ export default component$(
         <div class={styles.overlay} />
         <div class={styles.buttons}>
           <div class={styles.button}>
-            <Button color="blue" icon="add" label="Enqueue" onClick$={handleEnqueueButtonClick$} />
+            <Button
+              color="blue"
+              iconName="add"
+              label="Enqueue"
+              onClick$={handleEnqueueButtonClick$}
+            />
           </div>
 
           <div class={styles.button}>
-            <Button color="red" icon="cross" label="Reset" onClick$={handleResetButtonClick$} />
+            <Button color="red" iconName="cross" label="Reset" onClick$={handleResetButtonClick$} />
           </div>
         </div>
       </div>

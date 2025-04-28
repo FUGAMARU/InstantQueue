@@ -59,7 +59,7 @@ export default component$(() => {
         <div class={styles.button}>
           <Button
             color="green"
-            icon="spotify"
+            iconName="spotify"
             label="Sign-In with Spotify"
             onClick$={handleStartPKCE}
           />
