@@ -100,7 +100,13 @@ export const spotifyApiFunctions = $((accessToken: string): SpotifyApiFunctions 
       nextUrl = data.next
     }
 
-    return playlists
+    const temporaryPlaylistId = localStorage.getItem(
+      SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
+    )
+
+    return isValidString(temporaryPlaylistId)
+      ? playlists.filter(playlist => playlist.playlistId !== temporaryPlaylistId)
+      : playlists
   }
 
   /**
