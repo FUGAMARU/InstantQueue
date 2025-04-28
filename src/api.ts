@@ -29,6 +29,8 @@ type SpotifyApiFunctions = {
   startPlaylistPlayback: (playlistUri: string) => Promise<void>
   /** プレイリストを削除する */
   deletePlaylist: (playlistId: string) => Promise<void>
+  /** 利用可能な再生デバイス数を取得する */
+  getAvailableDeviceCount: () => Promise<number>
 }
 
 /** アカウント系Spotify APIの操作用関数群 */
@@ -222,13 +224,25 @@ export const spotifyApiFunctions = $((accessToken: string): SpotifyApiFunctions 
     await api.delete(`/playlists/${playlistId}/followers`)
   }
 
+  /**
+   * 利用可能な再生デバイス数を取得する
+   *
+   * @returns 利用可能な再生デバイス数
+   */
+  const getAvailableDeviceCount = async (): Promise<number> => {
+    const { data } = await api.get<SpotifyApi.UserDevicesResponse>("/me/player/devices")
+    const availableDevices = data.devices.filter(device => device.is_active)
+    return availableDevices.length
+  }
+
   return {
     getUserPlaylists,
     getUserName,
     getPlaylistTracks,
     createTemporaryPlaylistAndSetTracks,
     startPlaylistPlayback,
-    deletePlaylist
+    deletePlaylist,
+    getAvailableDeviceCount
   }
 })
 

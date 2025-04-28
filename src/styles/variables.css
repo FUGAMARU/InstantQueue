@@ -4,6 +4,8 @@
   --color-white: #fff;
   --color-gray: #bbb;
   --color-gray-alpha: #d4d4d499;
+  --color-yellow-green: #cbe65b;
+  --color-vivid-pink: #ee389f;
   --color-gradient-blue: linear-gradient(to bottom, #2db0fe 0%, #0078ff 100%);
   --color-gradient-red: linear-gradient(to bottom, #f77392 0%, #f6435c 100%);
   --color-gradient-green: linear-gradient(to bottom, #30d56f 0%, #00a040 100%);

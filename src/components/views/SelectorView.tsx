@@ -4,10 +4,11 @@ import { shuffle } from "es-toolkit"
 import { Vibrant } from "node-vibrant/browser"
 
 import { spotifyApiFunctions } from "@/api"
+import PlaybackState from "@/components/parts/PlaybackState"
 import ActionFooter from "@/components/templates/ActionFooter"
 import PlaylistGrid from "@/components/templates/PlaylistGrid"
 import styles from "@/components/views/SelectorView.module.css"
-import { PLAYLIST_COLOR_FALLBACK, WEB_STORAGE } from "@/constants"
+import { PLAYBACK_STATE_ALERT_MESSAGE, PLAYLIST_COLOR_FALLBACK, WEB_STORAGE } from "@/constants"
 import { isValidArray, isValidString } from "@/utils"
 
 import type { SelectedPlaylistsState } from "@/types"
@@ -17,9 +18,11 @@ import type { PropsOf } from "@builder.io/qwik"
 type Props = {
   /** アクセストークン */
   accessToken: string
+  /** 再生可能か */
+  playbackState: PropsOf<typeof PlaybackState>["state"]
 }
 
-export default component$(({ accessToken }: Props) => {
+export default component$(({ accessToken, playbackState }: Props) => {
   const unresolvedSpotifyApi = spotifyApiFunctions(accessToken)
   const userName = useSignal("")
   const playlists = useStore<PropsOf<typeof PlaylistGrid>["playlists"]>([])
@@ -59,6 +62,11 @@ export default component$(({ accessToken }: Props) => {
       return
     }
 
+    if (playbackState === "unable") {
+      alert(PLAYBACK_STATE_ALERT_MESSAGE)
+      return
+    }
+
     const spotifyApi = await unresolvedSpotifyApi
 
     // 選択されているプレイリストに含まれている全ての楽曲のURIを取得
@@ -87,7 +95,7 @@ export default component$(({ accessToken }: Props) => {
       }
 
       if (e.response?.data.error.reason === "NO_ACTIVE_DEVICE") {
-        alert("No playable devices found. Please open the Spotify app.")
+        alert(PLAYBACK_STATE_ALERT_MESSAGE)
       }
     }
   })
@@ -172,11 +180,14 @@ export default component$(({ accessToken }: Props) => {
           />
           <span class={styles.text}>InstantQueue v1.0.0</span>
         </div>
+
         <h1 class={styles.title}>
           Welcome back,
           <br />
           {userName.value} !
         </h1>
+
+        <PlaybackState state={playbackState} />
       </div>
 
       <div class={styles.grid}>

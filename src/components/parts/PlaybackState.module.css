@@ -1,0 +1,34 @@
+.playbackState {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  width: fit-content;
+  height: 14px;
+  padding: 2px 6px;
+  font-family: Gabarito, sans-serif;
+  border-radius: 4px;
+
+  &.Ready {
+    color: var(--color-black);
+    background-color: var(--color-yellow-green);
+    fill: var(--color-black);
+  }
+
+  &.Unable {
+    color: var(--color-white);
+    background-color: var(--color-vivid-pink);
+    fill: var(--color-white);
+  }
+
+  > .icon {
+    display: inline-flex;
+    width: 10px;
+    height: 10px;
+  }
+
+  > .text {
+    text-box: trim-both cap alphabetic;
+    padding-bottom: 0.5px;
+    font-size: 10px;
+  }
+}

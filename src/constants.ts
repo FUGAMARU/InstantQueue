@@ -10,7 +10,7 @@ export const SPOTIFY = {
   API_ENDPOINT_AUTH: "https://accounts.spotify.com/authorize",
   /** Spotify APIのスコープ */
   API_SCOPES:
-    "playlist-read-private playlist-modify-private playlist-read-collaborative user-read-email user-modify-playback-state",
+    "playlist-read-private playlist-modify-private playlist-read-collaborative user-read-email user-read-playback-state user-modify-playback-state",
   /** PKCEのリダイレクトURI */
   PKCE_REDIRECT_URI: "https://local.dev:5173/pkce",
   /** 一時的なプレイリストの名前 */
@@ -33,3 +33,7 @@ export const WEB_STORAGE = {
 
 /** プレイリストのテーマカラーを取得できなかった時のフォールバックカラー */
 export const PLAYLIST_COLOR_FALLBACK = "#212121"
+
+/** 再生不可能な状態で再生開始しようとした時に表示するアラートメッセージ */
+export const PLAYBACK_STATE_ALERT_MESSAGE =
+  "No playable devices found. Please open the Spotify app."
