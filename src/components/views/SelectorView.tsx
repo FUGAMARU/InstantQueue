@@ -7,6 +7,7 @@ import {
   useStore,
   useTask$
 } from "@builder.io/qwik"
+import { isAxiosError } from "axios"
 import { shuffle } from "es-toolkit"
 import { Vibrant } from "node-vibrant/browser"
 
@@ -79,7 +80,17 @@ export default component$(() => {
     )
 
     // 再生開始
-    await spotifyApi.startPlaylistPlayback(createdTemporaryPlaylistUri)
+    try {
+      await spotifyApi.startPlaylistPlayback(createdTemporaryPlaylistUri)
+    } catch (e) {
+      if (!isAxiosError(e)) {
+        throw e
+      }
+
+      if (e.response?.data.error.reason === "NO_ACTIVE_DEVICE") {
+        alert("再生可能なデバイスが存在しません。Spotifyアプリを開いてください。")
+      }
+    }
   })
 
   /** Resetボタンを押下した時の処理 */
