@@ -53,12 +53,17 @@ export default component$(({ accessToken }: Props) => {
 
   /** Enqueueボタンを押下した時の処理 */
   const handleEnqueueButtonClick$ = $(async (): Promise<void> => {
-    const spotifyApi = await unresolvedSpotifyApi
-
     // 選択されているプレイリストIDの一覧を取得
     const checkedPlaylistIdList = selectedPlaylistsState
       .filter(playlist => playlist.isChecked)
       .map(playlist => playlist.playlistId)
+
+    if (!isValidArray(checkedPlaylistIdList)) {
+      alert("No playlists have been selected.")
+      return
+    }
+
+    const spotifyApi = await unresolvedSpotifyApi
 
     // 選択されているプレイリストに含まれている全ての楽曲のURIを取得
     const allTrackUriList = await Promise.all(
@@ -86,7 +91,7 @@ export default component$(({ accessToken }: Props) => {
       }
 
       if (e.response?.data.error.reason === "NO_ACTIVE_DEVICE") {
-        alert("再生可能なデバイスが存在しません。Spotifyアプリを開いてください。")
+        alert("No playable devices found. Please open the Spotify app.")
       }
     }
   })
