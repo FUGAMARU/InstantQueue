@@ -22,6 +22,11 @@ const spotifyAccountsApi = axios.create({
   }
 })
 
+/** SpotifyのAPIに接続する時に使用するAxiosのインスタンス */
+const spotifyApi = axios.create({
+  baseURL: "https://api.spotify.com/v1"
+})
+
 /**
  * Bearerトークン付きのリクエストヘッダーを取得する
  *
@@ -144,8 +149,8 @@ export const getUserPlaylists = async (
  * @returns ユーザー名
  */
 export const getUserName = async (accessToken: string): Promise<string> => {
-  const { data } = await axios.get<SpotifyApi.CurrentUsersProfileResponse>(
-    "https://api.spotify.com/v1/me",
+  const { data } = await spotifyApi.get<SpotifyApi.CurrentUsersProfileResponse>(
+    "/me",
     getBearerTokenHeader(accessToken)
   )
 
@@ -201,8 +206,8 @@ export const createTemporaryPlaylistAndSetTracks = async (
   /** プレイリストURI */
   uri: string
 }> => {
-  const { data: playlistData } = await axios.post<SpotifyApi.CreatePlaylistResponse>(
-    "https://api.spotify.com/v1/me/playlists",
+  const { data: playlistData } = await spotifyApi.post<SpotifyApi.CreatePlaylistResponse>(
+    "/me/playlists",
     {
       name: SPOTIFY_TEMPORARY_PLAYLIST_NAME,
       public: false
@@ -232,11 +237,9 @@ export const createTemporaryPlaylistAndSetTracks = async (
 
   await Promise.all(
     chunkedTrackUriList.map(chunk =>
-      axios.post<SpotifyApi.PlaylistSnapshotResponse>(
-        `https://api.spotify.com/v1/playlists/${id}/tracks`,
-        {
-          uris: chunk
-        },
+      spotifyApi.post<SpotifyApi.PlaylistSnapshotResponse>(
+        `/playlists/${id}/tracks`,
+        { uris: chunk },
         getBearerTokenHeader(accessToken)
       )
     )
@@ -258,11 +261,9 @@ export const startPlaylistPlayback = async (
   accessToken: string,
   playlistUri: string
 ): Promise<void> => {
-  await axios.put(
-    "https://api.spotify.com/v1/me/player/play",
-    {
-      context_uri: playlistUri
-    },
+  await spotifyApi.put(
+    "/me/player/play",
+    { context_uri: playlistUri },
     getBearerTokenHeader(accessToken)
   )
 }
@@ -274,8 +275,5 @@ export const startPlaylistPlayback = async (
  * @param playlistId - プレイリストID
  */
 export const deletePlaylist = async (accessToken: string, playlistId: string): Promise<void> => {
-  await axios.delete(
-    `https://api.spotify.com/v1/playlists/${playlistId}/followers`,
-    getBearerTokenHeader(accessToken)
-  )
+  await spotifyApi.delete(`/playlists/${playlistId}/followers`, getBearerTokenHeader(accessToken))
 }
