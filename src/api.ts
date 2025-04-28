@@ -8,6 +8,7 @@ import axios from "axios"
 import {
   SPOTIFY_CLIENT_ID,
   SPOTIFY_PKCE_REDIRECT_URI,
+  SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY,
   SPOTIFY_TEMPORARY_PLAYLIST_NAME,
   SPOTIFY_USERNAME_FALLBACK
 } from "@/constants"
@@ -151,6 +152,16 @@ export const spotifyApiFunctions = $((accessToken: string): SpotifyApiFunctions 
     /** プレイリストURI */
     uri: string
   }> => {
+    const temporaryPlaylistId = localStorage.getItem(
+      SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
+    )
+
+    // 一時的なプレイリストが存在する場合は削除しておく
+    if (isValidString(temporaryPlaylistId)) {
+      await deletePlaylist(temporaryPlaylistId)
+      localStorage.removeItem(SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY)
+    }
+
     const { data: playlistData } = await api.post<SpotifyApi.CreatePlaylistResponse>(
       "/me/playlists",
       {
