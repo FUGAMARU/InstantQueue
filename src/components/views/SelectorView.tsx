@@ -11,19 +11,17 @@ import { isAxiosError } from "axios"
 import { shuffle } from "es-toolkit"
 import { Vibrant } from "node-vibrant/browser"
 
-import {
-  spotifyApiFunctions
-  // startPlaylistPlayback
-} from "@/api"
+import { spotifyApiFunctions } from "@/api"
 import ActionFooter from "@/components/templates/ActionFooter"
 import PlaylistGrid from "@/components/templates/PlaylistGrid"
 import styles from "@/components/views/SelectorView.module.css"
 import {
   PLAYLIST_COLOR_FALLBACK,
+  SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY,
   SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
 } from "@/constants"
 import { TokenContext } from "@/token-context"
-import { isValidString } from "@/utils"
+import { isValidArray, isValidString } from "@/utils"
 
 import type { SelectedPlaylistsState } from "@/types"
 import type { PropsOf } from "@builder.io/qwik"
@@ -33,12 +31,7 @@ export default component$(() => {
   const unresolvedSpotifyApi = spotifyApiFunctions(accessToken.value)
   const userName = useSignal("")
   const playlists = useStore<PropsOf<typeof PlaylistGrid>["playlists"]>([])
-  const selectedPlaylistsState = useStore<SelectedPlaylistsState>(
-    playlists.map(playlist => ({
-      playlistId: playlist.playlistId,
-      isChecked: false
-    }))
-  )
+  const selectedPlaylistsState = useStore<SelectedPlaylistsState>([])
 
   /**
    * プレイリストカードを押下した時の処理
@@ -51,6 +44,15 @@ export default component$(() => {
     )
 
     selectedPlaylistsState[targetIndex].isChecked = !selectedPlaylistsState[targetIndex].isChecked
+
+    localStorage.setItem(
+      SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY,
+      JSON.stringify(
+        selectedPlaylistsState
+          .filter(playlist => playlist.isChecked)
+          .map(playlist => playlist.playlistId)
+      )
+    )
   })
 
   /** Enqueueボタンを押下した時の処理 */
@@ -116,6 +118,9 @@ export default component$(() => {
 
     const spotifyApi = await unresolvedSpotifyApi
 
+    const userNameResponse = await spotifyApi.getUserName()
+    userName.value = userNameResponse
+
     const userPlaylists = await spotifyApi.getUserPlaylists()
     const playlistsWithThemeColor = await Promise.all(
       userPlaylists.map(async playlist => {
@@ -129,16 +134,23 @@ export default component$(() => {
     )
 
     Object.assign(playlists, playlistsWithThemeColor)
+
+    const checkedPlaylistIdListFromLocalStorage = localStorage.getItem(
+      SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY
+    )
+
+    const checkedPlaylistIdList = isValidString(checkedPlaylistIdListFromLocalStorage)
+      ? (JSON.parse(checkedPlaylistIdListFromLocalStorage) as Array<string>)
+      : []
+
     Object.assign(
       selectedPlaylistsState,
       playlistsWithThemeColor.map(playlist => ({
         playlistId: playlist.playlistId,
-        isChecked: false
+        isChecked:
+          isValidArray(checkedPlaylistIdList) && checkedPlaylistIdList.includes(playlist.playlistId)
       }))
     )
-
-    const userNameResponse = await spotifyApi.getUserName()
-    userName.value = userNameResponse
   })
 
   return (

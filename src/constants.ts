@@ -32,3 +32,6 @@ export const SPOTIFY_USERNAME_FALLBACK = "User"
 
 /** プレイリストのサムネイルからテーマカラーを取得できなかった時のフォールバック色 */
 export const PLAYLIST_COLOR_FALLBACK = "#212121"
+
+/** 選択済みプレイリストをLocalStorageに保存しておく時のキー */
+export const SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY = "selected_playlist_id_list"
