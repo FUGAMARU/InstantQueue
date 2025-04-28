@@ -1,12 +1,4 @@
-import {
-  $,
-  component$,
-  isServer,
-  useContext,
-  useSignal,
-  useStore,
-  useTask$
-} from "@builder.io/qwik"
+import { $, component$, isServer, useSignal, useStore, useTask$ } from "@builder.io/qwik"
 import { isAxiosError } from "axios"
 import { shuffle } from "es-toolkit"
 import { Vibrant } from "node-vibrant/browser"
@@ -20,15 +12,19 @@ import {
   SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY,
   SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
 } from "@/constants"
-import { TokenContext } from "@/token-context"
 import { isValidArray, isValidString } from "@/utils"
 
 import type { SelectedPlaylistsState } from "@/types"
 import type { PropsOf } from "@builder.io/qwik"
 
-export default component$(() => {
-  const accessToken = useContext(TokenContext)
-  const unresolvedSpotifyApi = spotifyApiFunctions(accessToken.value)
+/** Props */
+type Props = {
+  /** アクセストークン */
+  accessToken: string
+}
+
+export default component$(({ accessToken }: Props) => {
+  const unresolvedSpotifyApi = spotifyApiFunctions(accessToken)
   const userName = useSignal("")
   const playlists = useStore<PropsOf<typeof PlaylistGrid>["playlists"]>([])
   const selectedPlaylistsState = useStore<SelectedPlaylistsState>([])

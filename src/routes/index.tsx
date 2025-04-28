@@ -84,7 +84,7 @@ export default component$(() => {
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      {view.value === "top" ? <TopView /> : <SelectorView />}
+      {view.value === "top" ? <TopView /> : <SelectorView accessToken={accessToken.value} />}
     </div>
   )
 })
