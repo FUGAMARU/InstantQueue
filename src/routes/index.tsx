@@ -1,6 +1,7 @@
 import { component$, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik"
 
 import { spotifyAccountsApiFunctions } from "@/api"
+import LoadingView from "@/components/views/LoadingView"
 import SelectorView from "@/components/views/SelectorView"
 import TopView from "@/components/views/TopView"
 import { WEB_STORAGE } from "@/constants"
@@ -11,7 +12,7 @@ import type { DocumentHead } from "@builder.io/qwik-city"
 
 export default component$(() => {
   const accessToken = useContext(TokenContext)
-  const view = useSignal<"blank" | "top" | "selector">("blank")
+  const view = useSignal<"loading" | "top" | "selector">("loading")
 
   // useTask + サーバーガードだとなぜか1度サインインしてページリロードするとまたトップ画面に戻ってしまうのでuseVisibleTaskを使用
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -86,8 +87,8 @@ export default component$(() => {
       return <TopView />
     case "selector":
       return <SelectorView accessToken={accessToken.value} />
-    case "blank":
-      return null
+    case "loading":
+      return <LoadingView />
   }
 })
 
