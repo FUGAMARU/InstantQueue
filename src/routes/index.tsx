@@ -3,7 +3,7 @@ import { component$, useContext, useSignal, useVisibleTask$ } from "@builder.io/
 import { spotifyAccountsApiFunctions } from "@/api"
 import SelectorView from "@/components/views/SelectorView"
 import TopView from "@/components/views/TopView"
-import { SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY } from "@/constants"
+import { WEB_STORAGE } from "@/constants"
 import { TokenContext } from "@/token-context"
 import { isValidString } from "@/utils"
 
@@ -16,7 +16,7 @@ export default component$(() => {
   // useTask + サーバーガードだとなぜか1度サインインしてページリロードするとまたトップ画面に戻ってしまうのでuseVisibleTaskを使用
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ cleanup }) => {
-    const refreshToken = localStorage.getItem(SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY)
+    const refreshToken = localStorage.getItem(WEB_STORAGE.REFRESH_TOKEN_LOCAL_STORAGE_KEY)
 
     const hasAccessToken = isValidString(accessToken.value)
     const hasRefreshToken = isValidString(refreshToken)
@@ -30,7 +30,10 @@ export default component$(() => {
       const spotifyAccountsApi = await spotifyAccountsApiFunctions()
       const accessTokenInfo = await spotifyAccountsApi.refreshAccessToken(refreshToken)
       accessToken.value = accessTokenInfo.accessToken
-      localStorage.setItem(SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY, accessTokenInfo.refreshToken)
+      localStorage.setItem(
+        WEB_STORAGE.REFRESH_TOKEN_LOCAL_STORAGE_KEY,
+        accessTokenInfo.refreshToken
+      )
     }
 
     // if文で早期returnするとfocusのイベントハンドリングまで到達できないのでswitch文を使用
@@ -58,7 +61,7 @@ export default component$(() => {
 
     /** フォーカスした時の処理 */
     const handleFocus = async (): Promise<void> => {
-      const currentRefreshToken = localStorage.getItem(SPOTIFY_REFRESH_TOKEN_LOCAL_STORAGE_KEY)
+      const currentRefreshToken = localStorage.getItem(WEB_STORAGE.REFRESH_TOKEN_LOCAL_STORAGE_KEY)
 
       if (!hasRefreshToken || !isValidString(currentRefreshToken)) {
         return

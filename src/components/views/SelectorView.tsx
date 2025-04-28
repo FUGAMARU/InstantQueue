@@ -7,11 +7,7 @@ import { spotifyApiFunctions } from "@/api"
 import ActionFooter from "@/components/templates/ActionFooter"
 import PlaylistGrid from "@/components/templates/PlaylistGrid"
 import styles from "@/components/views/SelectorView.module.css"
-import {
-  PLAYLIST_COLOR_FALLBACK,
-  SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY,
-  SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
-} from "@/constants"
+import { PLAYLIST_COLOR_FALLBACK, WEB_STORAGE } from "@/constants"
 import { isValidArray, isValidString } from "@/utils"
 
 import type { SelectedPlaylistsState } from "@/types"
@@ -42,7 +38,7 @@ export default component$(({ accessToken }: Props) => {
     selectedPlaylistsState[targetIndex].isChecked = !selectedPlaylistsState[targetIndex].isChecked
 
     localStorage.setItem(
-      SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY,
+      WEB_STORAGE.SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY,
       JSON.stringify(
         selectedPlaylistsState
           .filter(playlist => playlist.isChecked)
@@ -78,7 +74,7 @@ export default component$(({ accessToken }: Props) => {
       await spotifyApi.createTemporaryPlaylistAndSetTracks(shuffledTrackUriList)
 
     localStorage.setItem(
-      SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY,
+      WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY,
       createdTemporaryPlaylistId
     )
 
@@ -106,17 +102,17 @@ export default component$(({ accessToken }: Props) => {
       }))
     )
 
-    localStorage.removeItem(SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY)
+    localStorage.removeItem(WEB_STORAGE.SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY)
 
     const temporaryPlaylistId = localStorage.getItem(
-      SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
+      WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
     )
 
     if (!isValidString(temporaryPlaylistId)) {
       return
     }
 
-    localStorage.removeItem(SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY)
+    localStorage.removeItem(WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY)
 
     const spotifyApi = await unresolvedSpotifyApi
     await spotifyApi.deletePlaylist(temporaryPlaylistId)
@@ -147,7 +143,7 @@ export default component$(({ accessToken }: Props) => {
     Object.assign(playlists, playlistsWithThemeColor)
 
     const checkedPlaylistIdListFromLocalStorage = localStorage.getItem(
-      SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY
+      WEB_STORAGE.SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY
     )
 
     const checkedPlaylistIdList = isValidString(checkedPlaylistIdListFromLocalStorage)

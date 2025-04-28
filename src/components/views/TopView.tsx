@@ -2,13 +2,7 @@ import { $, component$ } from "@builder.io/qwik"
 
 import Button from "@/components/parts/Button"
 import styles from "@/components/views/TopView.module.css"
-import {
-  SPOTIFY_PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY,
-  SPOTIFY_API_ENDPOINT_AUTH,
-  SPOTIFY_CLIENT_ID,
-  SPOTIFY_API_SCOPES,
-  SPOTIFY_PKCE_REDIRECT_URI
-} from "@/constants"
+import { SPOTIFY, WEB_STORAGE } from "@/constants"
 
 export default component$(() => {
   /**
@@ -23,7 +17,7 @@ export default component$(() => {
     const randomValues = crypto.getRandomValues(new Uint8Array(64))
     const codeVerifier = randomValues.reduce((acc, x) => acc + possible[x % possible.length], "")
 
-    sessionStorage.setItem(SPOTIFY_PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY, codeVerifier)
+    sessionStorage.setItem(WEB_STORAGE.PKCE_CODE_VERIFIER_SESSION_STORAGE_KEY, codeVerifier)
 
     // CodeChallengeの生成
     const data = new TextEncoder().encode(codeVerifier)
@@ -34,14 +28,14 @@ export default component$(() => {
       .replace(/\//g, "_")
 
     // 認証URLの生成
-    const authUrl = new URL(SPOTIFY_API_ENDPOINT_AUTH)
+    const authUrl = new URL(SPOTIFY.API_ENDPOINT_AUTH)
     const params = {
       response_type: "code",
       code_challenge_method: "S256",
       code_challenge: codeChallenge,
-      client_id: SPOTIFY_CLIENT_ID,
-      scope: SPOTIFY_API_SCOPES,
-      redirect_uri: SPOTIFY_PKCE_REDIRECT_URI
+      client_id: SPOTIFY.CLIENT_ID,
+      scope: SPOTIFY.API_SCOPES,
+      redirect_uri: SPOTIFY.PKCE_REDIRECT_URI
     }
     authUrl.search = new URLSearchParams(params).toString()
 

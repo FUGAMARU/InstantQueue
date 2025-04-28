@@ -5,13 +5,7 @@
 import { $ } from "@builder.io/qwik"
 import axios from "axios"
 
-import {
-  SPOTIFY_CLIENT_ID,
-  SPOTIFY_PKCE_REDIRECT_URI,
-  SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY,
-  SPOTIFY_TEMPORARY_PLAYLIST_NAME,
-  SPOTIFY_USERNAME_FALLBACK
-} from "@/constants"
+import { SPOTIFY, WEB_STORAGE } from "@/constants"
 import { isDefined, isValidString } from "@/utils"
 
 import type { Playlist } from "@/types"
@@ -101,7 +95,7 @@ export const spotifyApiFunctions = $((accessToken: string): SpotifyApiFunctions 
     }
 
     const temporaryPlaylistId = localStorage.getItem(
-      SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
+      WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
     )
 
     return isValidString(temporaryPlaylistId)
@@ -117,7 +111,7 @@ export const spotifyApiFunctions = $((accessToken: string): SpotifyApiFunctions 
   const getUserName = async (): Promise<string> => {
     const { data } = await api.get<SpotifyApi.CurrentUsersProfileResponse>("/me")
 
-    return data.display_name ?? SPOTIFY_USERNAME_FALLBACK
+    return data.display_name ?? SPOTIFY.USERNAME_FALLBACK
   }
 
   const getPlaylistTracks = $(async (playlistId: string): Promise<Array<string>> => {
@@ -159,19 +153,19 @@ export const spotifyApiFunctions = $((accessToken: string): SpotifyApiFunctions 
     uri: string
   }> => {
     const temporaryPlaylistId = localStorage.getItem(
-      SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
+      WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
     )
 
     // 一時的なプレイリストが存在する場合は削除しておく
     if (isValidString(temporaryPlaylistId)) {
       await deletePlaylist(temporaryPlaylistId)
-      localStorage.removeItem(SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY)
+      localStorage.removeItem(WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY)
     }
 
     const { data: playlistData } = await api.post<SpotifyApi.CreatePlaylistResponse>(
       "/me/playlists",
       {
-        name: SPOTIFY_TEMPORARY_PLAYLIST_NAME,
+        name: SPOTIFY.TEMPORARY_PLAYLIST_NAME,
         public: false
       }
     )
@@ -260,8 +254,8 @@ export const spotifyAccountsApiFunctions = $((): SpotifyAccountsApiFunctions => 
         grant_type: "authorization_code",
         code,
         code_verifier: codeVerifier,
-        client_id: SPOTIFY_CLIENT_ID,
-        redirect_uri: SPOTIFY_PKCE_REDIRECT_URI // 使用はされないがcodeの取得時と完全に一致する必要がある
+        client_id: SPOTIFY.CLIENT_ID,
+        redirect_uri: SPOTIFY.PKCE_REDIRECT_URI // 使用はされないがcodeの取得時と完全に一致する必要がある
       })
     )
 
@@ -283,7 +277,7 @@ export const spotifyAccountsApiFunctions = $((): SpotifyAccountsApiFunctions => 
       new URLSearchParams({
         grant_type: "refresh_token",
         refresh_token: refreshToken,
-        client_id: SPOTIFY_CLIENT_ID
+        client_id: SPOTIFY.CLIENT_ID
       })
     )
 
