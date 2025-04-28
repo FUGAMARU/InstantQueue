@@ -78,15 +78,14 @@ export default component$(() => {
     })
   })
 
-  if (view.value === "blank") {
-    return null
+  switch (view.value) {
+    case "top":
+      return <TopView />
+    case "selector":
+      return <SelectorView accessToken={accessToken.value} />
+    case "blank":
+      return null
   }
-
-  return (
-    <div style={{ width: "100vw", height: "100vh" }}>
-      {view.value === "top" ? <TopView /> : <SelectorView accessToken={accessToken.value} />}
-    </div>
-  )
 })
 
 export const head: DocumentHead = {
