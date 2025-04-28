@@ -12,6 +12,7 @@ import { Vibrant } from "node-vibrant/browser"
 
 import {
   createTemporaryPlaylistAndSetTracks,
+  deletePlaylist,
   getPlaylistTracks,
   getUserName,
   getUserPlaylists,
@@ -25,6 +26,7 @@ import {
   SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
 } from "@/constants"
 import { TokenContext } from "@/token-context"
+import { isValidString } from "@/utils"
 
 import type { SelectedPlaylistsState } from "@/types"
 import type { PropsOf } from "@builder.io/qwik"
@@ -81,9 +83,19 @@ export default component$(() => {
     await startPlaylistPlayback(accessToken.value, createdTemporaryPlaylistUri)
   })
 
-  /** Reset Queueボタンを押下した時の処理 */
-  const handleResetQueueButtonClick$ = $((): void => {
-    console.log("Reset Queue button clicked")
+  /** Resetボタンを押下した時の処理 */
+  const handleResetButtonClick$ = $(async (): Promise<void> => {
+    const temporaryPlaylistId = localStorage.getItem(
+      SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
+    )
+
+    if (!isValidString(temporaryPlaylistId)) {
+      return
+    }
+
+    localStorage.removeItem(SPOTIFY_TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY)
+
+    await deletePlaylist(accessToken.value, temporaryPlaylistId)
   })
 
   useTask$(async () => {
@@ -145,7 +157,7 @@ export default component$(() => {
 
       <ActionFooter
         onEnqueueButtonClick$={handleEnqueueButtonClick$}
-        onResetQueueButtonClick$={handleResetQueueButtonClick$}
+        onResetButtonClick$={handleResetButtonClick$}
       />
     </div>
   )

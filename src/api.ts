@@ -266,3 +266,16 @@ export const startPlaylistPlayback = async (
     getBearerTokenHeader(accessToken)
   )
 }
+
+/**
+ * プレイリストを削除する
+ *
+ * @param accessToken - アクセストークン
+ * @param playlistId - プレイリストID
+ */
+export const deletePlaylist = async (accessToken: string, playlistId: string): Promise<void> => {
+  await axios.delete(
+    `https://api.spotify.com/v1/playlists/${playlistId}/followers`,
+    getBearerTokenHeader(accessToken)
+  )
+}

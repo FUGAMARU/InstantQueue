@@ -9,14 +9,14 @@ import type { QRL } from "@builder.io/qwik"
 type Props = {
   /** Enqueueボタンを押下した時の処理 */
   onEnqueueButtonClick$: QRL<() => void>
-  /** Reset Queueボタンを押下した時の処理 */
-  onResetQueueButtonClick$: QRL<() => void>
+  /** Resetボタンを押下した時の処理 */
+  onResetButtonClick$: QRL<() => void>
 }
 
 export default component$(
   ({
     onEnqueueButtonClick$: handleEnqueueButtonClick$,
-    onResetQueueButtonClick$: handleResetQueueButtonClick$
+    onResetButtonClick$: handleResetButtonClick$
   }: Props) => {
     return (
       <div class={styles.actionFooter}>
@@ -27,12 +27,7 @@ export default component$(
           </div>
 
           <div class={styles.button}>
-            <Button
-              color="red"
-              icon="cross"
-              label="Reset Queue"
-              onClick$={handleResetQueueButtonClick$}
-            />
+            <Button color="red" icon="cross" label="Reset" onClick$={handleResetButtonClick$} />
           </div>
         </div>
       </div>
