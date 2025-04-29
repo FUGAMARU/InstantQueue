@@ -31,8 +31,17 @@ export const WEB_STORAGE = {
   SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY: "selected_playlist_id_list"
 } as const
 
-/** プレイリストのテーマカラーを取得できなかった時のフォールバックカラー */
-export const PLAYLIST_COLOR_FALLBACK = "#212121"
+/** 要素関連の定数 */
+export const ELEMENTS = {
+  /** プレイリストのテーマカラーを取得できなかった時のフォールバックカラー */
+  PLAYLIST_COLOR_FALLBACK: "#212121",
+  /** ボタンコンテンツIDの接頭辞 */
+  BUTTON_CONTENTS_ID_PREFIX: "button-contents-",
+  /** ボタンコンテンツのフェードアニメーションのDuration */
+  BUTTON_CONTENTS_FADE_ANIMATION_DURATION: 400,
+  /** ボタンコンテンツのフェードアニメーション後にチェックマークを表示しておく秒数 (ミリ秒) */
+  BUTTON_CONTENTS_CHECK_MARK_DISPLAY_DURATION: 3000
+}
 
 /** 再生不可能な状態で再生開始しようとした時に表示するアラートメッセージ */
 export const PLAYBACK_STATE_ALERT_MESSAGE =

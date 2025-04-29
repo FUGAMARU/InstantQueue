@@ -8,7 +8,7 @@ import PlaybackState from "@/components/parts/PlaybackState"
 import ActionFooter from "@/components/templates/ActionFooter"
 import PlaylistGrid from "@/components/templates/PlaylistGrid"
 import styles from "@/components/views/SelectorView.module.css"
-import { PLAYBACK_STATE_ALERT_MESSAGE, PLAYLIST_COLOR_FALLBACK, WEB_STORAGE } from "@/constants"
+import { PLAYBACK_STATE_ALERT_MESSAGE, ELEMENTS, WEB_STORAGE } from "@/constants"
 import { isValidArray, isValidString } from "@/utils"
 
 import type { SelectedPlaylistsState } from "@/types"
@@ -27,6 +27,11 @@ export default component$(({ accessToken, playbackState }: Props) => {
   const userName = useSignal("")
   const playlists = useStore<PropsOf<typeof PlaylistGrid>["playlists"]>([])
   const selectedPlaylistsState = useStore<SelectedPlaylistsState>([])
+
+  const enqueueButtonCheckMarkTrigger = useSignal<boolean | undefined>()
+  const resetButtonCheckMarkTrigger = useSignal<boolean | undefined>()
+  const isEnqueueButtonProcessing = useSignal(false)
+  const isResetButtonProcessing = useSignal(false)
 
   /**
    * プレイリストカードを押下した時の処理
@@ -52,78 +57,100 @@ export default component$(({ accessToken, playbackState }: Props) => {
 
   /** Enqueueボタンを押下した時の処理 */
   const handleEnqueueButtonClick$ = $(async (): Promise<void> => {
-    // 選択されているプレイリストIDの一覧を取得
-    const checkedPlaylistIdList = selectedPlaylistsState
-      .filter(playlist => playlist.isChecked)
-      .map(playlist => playlist.playlistId)
-
-    if (!isValidArray(checkedPlaylistIdList)) {
-      alert("No playlists have been selected.")
-      return
-    }
-
-    if (playbackState === "unable") {
-      alert(PLAYBACK_STATE_ALERT_MESSAGE)
-      return
-    }
-
-    const spotifyApi = await unresolvedSpotifyApi
-
-    // 選択されているプレイリストに含まれている全ての楽曲のURIを取得
-    const allTrackUriList = await Promise.all(
-      checkedPlaylistIdList.map(playlistId => spotifyApi.getPlaylistTracks(playlistId))
-    )
-
-    // 取得した楽曲のURIをランダムに並べ替える
-    const shuffledTrackUriList = shuffle(allTrackUriList.flatMap(trackUriList => trackUriList))
-
-    // ランダムに並べ替えた楽曲のURIをセットした一時的なプレイリストを作成
-    const { id: createdTemporaryPlaylistId, uri: createdTemporaryPlaylistUri } =
-      await spotifyApi.createTemporaryPlaylistAndSetTracks(shuffledTrackUriList)
-
-    localStorage.setItem(
-      WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY,
-      createdTemporaryPlaylistId
-    )
-
-    // 再生開始
     try {
-      await spotifyApi.startPlaylistPlayback(createdTemporaryPlaylistUri)
-    } catch (e) {
-      if (!isAxiosError(e)) {
-        throw e
+      isEnqueueButtonProcessing.value = true
+
+      // 選択されているプレイリストIDの一覧を取得
+      const checkedPlaylistIdList = selectedPlaylistsState
+        .filter(playlist => playlist.isChecked)
+        .map(playlist => playlist.playlistId)
+
+      if (!isValidArray(checkedPlaylistIdList)) {
+        alert("No playlists have been selected.")
+        return
       }
 
-      if (e.response?.data.error.reason === "NO_ACTIVE_DEVICE") {
+      if (playbackState === "unable") {
         alert(PLAYBACK_STATE_ALERT_MESSAGE)
+        return
       }
+
+      const spotifyApi = await unresolvedSpotifyApi
+
+      // 選択されているプレイリストに含まれている全ての楽曲のURIを取得
+      const allTrackUriList = await Promise.all(
+        checkedPlaylistIdList.map(playlistId => spotifyApi.getPlaylistTracks(playlistId))
+      )
+
+      // 取得した楽曲のURIをランダムに並べ替える
+      const shuffledTrackUriList = shuffle(allTrackUriList.flatMap(trackUriList => trackUriList))
+
+      // ランダムに並べ替えた楽曲のURIをセットした一時的なプレイリストを作成
+      const { id: createdTemporaryPlaylistId, uri: createdTemporaryPlaylistUri } =
+        await spotifyApi.createTemporaryPlaylistAndSetTracks(shuffledTrackUriList)
+
+      localStorage.setItem(
+        WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY,
+        createdTemporaryPlaylistId
+      )
+
+      // 再生開始
+      try {
+        await spotifyApi.startPlaylistPlayback(createdTemporaryPlaylistUri)
+      } catch (e) {
+        if (!isAxiosError(e)) {
+          throw e
+        }
+
+        if (e.response?.data.error.reason === "NO_ACTIVE_DEVICE") {
+          alert(PLAYBACK_STATE_ALERT_MESSAGE)
+        }
+      }
+
+      // ボタンの中身をチェックマーク表示にする
+      enqueueButtonCheckMarkTrigger.value = !(enqueueButtonCheckMarkTrigger.value ?? false)
+    } finally {
+      setTimeout(() => {
+        isEnqueueButtonProcessing.value = false
+      }, ELEMENTS.BUTTON_CONTENTS_FADE_ANIMATION_DURATION)
     }
   })
 
   /** Resetボタンを押下した時の処理 */
   const handleResetButtonClick$ = $(async (): Promise<void> => {
-    Object.assign(
-      selectedPlaylistsState,
-      selectedPlaylistsState.map(playlist => ({
-        playlistId: playlist.playlistId,
-        isChecked: false
-      }))
-    )
+    try {
+      isResetButtonProcessing.value = true
 
-    localStorage.removeItem(WEB_STORAGE.SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY)
+      Object.assign(
+        selectedPlaylistsState,
+        selectedPlaylistsState.map(playlist => ({
+          playlistId: playlist.playlistId,
+          isChecked: false
+        }))
+      )
 
-    const temporaryPlaylistId = localStorage.getItem(
-      WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
-    )
+      localStorage.removeItem(WEB_STORAGE.SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY)
 
-    if (!isValidString(temporaryPlaylistId)) {
-      return
+      const temporaryPlaylistId = localStorage.getItem(
+        WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY
+      )
+
+      if (!isValidString(temporaryPlaylistId)) {
+        return
+      }
+
+      localStorage.removeItem(WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY)
+
+      const spotifyApi = await unresolvedSpotifyApi
+      await spotifyApi.deletePlaylist(temporaryPlaylistId)
+
+      // ボタンの中身をチェックマーク表示にする
+      resetButtonCheckMarkTrigger.value = !(resetButtonCheckMarkTrigger.value ?? false)
+    } finally {
+      setTimeout(() => {
+        isResetButtonProcessing.value = false
+      }, ELEMENTS.BUTTON_CONTENTS_FADE_ANIMATION_DURATION)
     }
-
-    localStorage.removeItem(WEB_STORAGE.TEMPORARY_PLAYLIST_ID_LOCAL_STORAGE_KEY)
-
-    const spotifyApi = await unresolvedSpotifyApi
-    await spotifyApi.deletePlaylist(temporaryPlaylistId)
   })
 
   useTask$(async () => {
@@ -143,7 +170,7 @@ export default component$(({ accessToken, playbackState }: Props) => {
         const vibrantColor = palette.Vibrant?.hex
         return {
           ...playlist,
-          themeColor: vibrantColor ?? PLAYLIST_COLOR_FALLBACK
+          themeColor: vibrantColor ?? ELEMENTS.PLAYLIST_COLOR_FALLBACK
         }
       })
     )
@@ -199,8 +226,12 @@ export default component$(({ accessToken, playbackState }: Props) => {
       </div>
 
       <ActionFooter
+        enqueueButtonCheckMarkTrigger={enqueueButtonCheckMarkTrigger.value}
+        isEnqueueButtonProcessing={isEnqueueButtonProcessing.value}
+        isResetButtonProcessing={isResetButtonProcessing.value}
         onEnqueueButtonClick$={handleEnqueueButtonClick$}
         onResetButtonClick$={handleResetButtonClick$}
+        resetButtonCheckMarkTrigger={resetButtonCheckMarkTrigger.value}
       />
     </div>
   )

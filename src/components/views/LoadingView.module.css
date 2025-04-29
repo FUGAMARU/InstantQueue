@@ -4,25 +4,6 @@
   height: 100%;
 
   > .spinner {
-    --weight: 4px;
-
     width: 50px;
-    aspect-ratio: 1;
-    background: var(--color-white);
-    border-radius: 50%;
-    mask: repeating-conic-gradient(#0000 0deg, #000 1deg 70deg, #0000 71deg 90deg),
-      radial-gradient(
-        farthest-side,
-        #0000 calc(100% - var(--weight) - 1px),
-        #000 calc(100% - var(--weight))
-      );
-    mask-composite: intersect;
-    animation: rotation 1s infinite;
-  }
-}
-
-@keyframes rotation {
-  to {
-    transform: rotate(0.5turn);
   }
 }
