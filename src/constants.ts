@@ -6,13 +6,13 @@
 export const SPOTIFY = {
   /** SpotifyのクライアントID */
   CLIENT_ID: import.meta.env.PUBLIC_SPOTIFY_CLIENT_ID,
+  /** PKCEのリダイレクトURI */
+  PKCE_REDIRECT_URI: `${import.meta.env.PUBLIC_SITE_ORIGIN}/pkce`,
   /** Spotifyの認証エンドポイント */
   API_ENDPOINT_AUTH: "https://accounts.spotify.com/authorize",
   /** Spotify APIのスコープ */
   API_SCOPES:
     "playlist-read-private playlist-modify-private playlist-read-collaborative user-read-email user-read-playback-state user-modify-playback-state",
-  /** PKCEのリダイレクトURI */
-  PKCE_REDIRECT_URI: "https://local.dev:5173/pkce",
   /** 一時的なプレイリストの名前 */
   TEMPORARY_PLAYLIST_NAME: "InstantQueue Temporary Playlist",
   /** ユーザー名のフォールバック */
