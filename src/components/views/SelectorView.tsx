@@ -4,6 +4,7 @@ import { shuffle } from "es-toolkit"
 import { Vibrant } from "node-vibrant/browser"
 
 import { spotifyApiFunctions } from "@/api"
+import Mascot from "@/components/parts/Mascot"
 import PlaybackState from "@/components/parts/PlaybackState"
 import ActionFooter from "@/components/templates/ActionFooter"
 import PlaylistGrid from "@/components/templates/PlaylistGrid"
@@ -215,6 +216,10 @@ export default component$(({ accessToken, playbackState }: Props) => {
         </h1>
 
         <PlaybackState state={playbackState} />
+
+        <div class={styles.mascot}>
+          <Mascot />
+        </div>
       </div>
 
       <div class={styles.grid}>
