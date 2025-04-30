@@ -2,6 +2,7 @@ import { component$ } from "@builder.io/qwik"
 
 import PlaylistCard from "@/components/parts/PlaylistCard"
 import styles from "@/components/templates/PlaylistGrid.module.css"
+import { SPOTIFY } from "@/constants"
 
 import type { Playlist, SelectedPlaylistsState } from "@/types"
 import type { QRL, useStore } from "@builder.io/qwik"
@@ -27,6 +28,7 @@ export default component$(
         {playlists.map(playlist => (
           <PlaylistCard
             key={playlist.playlistId}
+            isLikedSongs={playlist.playlistId === SPOTIFY.LIKED_SONGS_PLAYLIST_ID}
             isSelected={
               selectedPlaylistsStateStore.find(
                 selectedPlaylist => selectedPlaylist.playlistId === playlist.playlistId

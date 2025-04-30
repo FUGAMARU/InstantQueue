@@ -31,10 +31,19 @@ type Props = Omit<Playlist, "playlistId"> & {
   isSelected?: boolean
   /** 押下した時の処理 */
   onClick$: PropFunction<() => void>
+  /** お気に入りの曲かどうか */
+  isLikedSongs?: boolean
 }
 
 export default component$(
-  ({ name, thumbnail, themeColor, isSelected = false, onClick$: handleClick$ }: Props) => {
+  ({
+    name,
+    thumbnail,
+    themeColor,
+    isSelected = false,
+    onClick$: handleClick$,
+    isLikedSongs = false
+  }: Props) => {
     return (
       <button
         class={styles.playlistCard}
@@ -43,7 +52,16 @@ export default component$(
         type="button"
       >
         <div class={styles.contents}>
-          <img alt={name} class={styles.artwork} height={138} src={thumbnail} width={138} />
+          {isLikedSongs ? (
+            <div class={styles.likedSongs}>
+              <span class={styles.heart}>
+                <Icon name="heart" />
+              </span>
+            </div>
+          ) : (
+            <img alt={name} class={styles.artwork} height={138} src={thumbnail} width={138} />
+          )}
+
           <div class={styles.title} style={{ backgroundColor: `${themeColor}cc` }}>
             <span class={clsx(styles.inner, !determineWhiteTextColor(themeColor) && styles.Black)}>
               {name}

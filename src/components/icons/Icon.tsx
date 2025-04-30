@@ -3,13 +3,14 @@ import { component$ } from "@builder.io/qwik"
 import IconAdd from "@/components/icons/IconAdd"
 import IconCheck from "@/components/icons/IconCheck"
 import IconCross from "@/components/icons/IconCross"
+import IconHeart from "@/components/icons/IconHeart"
 import IconSpotify from "@/components/icons/IconSpotify"
 import IconUnable from "@/components/icons/IconUnable"
 
 /** Props */
 type Props = {
   /** アイコン名 */
-  name: "add" | "cross" | "check" | "spotify" | "unable"
+  name: "add" | "cross" | "check" | "spotify" | "unable" | "heart"
 }
 
 export default component$(({ name }: Props) => {
@@ -24,5 +25,7 @@ export default component$(({ name }: Props) => {
       return <IconSpotify />
     case "unable":
       return <IconUnable />
+    case "heart":
+      return <IconHeart />
   }
 })

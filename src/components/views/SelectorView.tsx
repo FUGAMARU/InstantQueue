@@ -10,7 +10,7 @@ import PlaybackState from "@/components/parts/PlaybackState"
 import ActionFooter from "@/components/templates/ActionFooter"
 import PlaylistGrid from "@/components/templates/PlaylistGrid"
 import styles from "@/components/views/SelectorView.module.css"
-import { PLAYBACK_STATE_ALERT_MESSAGE, ELEMENTS, WEB_STORAGE } from "@/constants"
+import { PLAYBACK_STATE_ALERT_MESSAGE, ELEMENTS, WEB_STORAGE, SPOTIFY } from "@/constants"
 import { isValidArray, isValidString } from "@/utils"
 
 import type { SelectedPlaylistsState } from "@/types"
@@ -195,7 +195,17 @@ export default component$(({ accessToken, playbackState }: Props) => {
       }
     })
 
-    Object.assign(playlists, playlistsWithThemeColor)
+    const playlistsWithLikedSongs = [
+      {
+        playlistId: SPOTIFY.LIKED_SONGS_PLAYLIST_ID,
+        name: "Liked Songs",
+        thumbnail: "", // 使用されないので空文字
+        themeColor: ELEMENTS.LIKED_SONGS_COLOR
+      },
+      ...playlistsWithThemeColor
+    ]
+
+    Object.assign(playlists, playlistsWithLikedSongs)
 
     const checkedPlaylistIdListFromLocalStorage = localStorage.getItem(
       WEB_STORAGE.SELECTED_PLAYLIST_ID_LIST_LOCAL_STORAGE_KEY
@@ -207,7 +217,7 @@ export default component$(({ accessToken, playbackState }: Props) => {
 
     Object.assign(
       selectedPlaylistsState,
-      playlistsWithThemeColor.map(playlist => ({
+      playlistsWithLikedSongs.map(playlist => ({
         playlistId: playlist.playlistId,
         isChecked:
           isValidArray(checkedPlaylistIdList) && checkedPlaylistIdList.includes(playlist.playlistId)

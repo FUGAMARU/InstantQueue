@@ -4,6 +4,7 @@
 
 import { $ } from "@builder.io/qwik"
 import axios from "axios"
+import { uniq } from "es-toolkit"
 
 import { SPOTIFY, WEB_STORAGE } from "@/constants"
 import { isDefined, isValidString } from "@/utils"
@@ -116,13 +117,24 @@ export const spotifyApiFunctions = $((accessToken: string): SpotifyApiFunctions 
     return data.display_name ?? SPOTIFY.USERNAME_FALLBACK
   }
 
-  const getPlaylistTracks = $(async (playlistId: string): Promise<Array<string>> => {
+  /**
+   * プレイリストに含まれる楽曲のURI一覧を取得する
+   *
+   * @param playlistId - プレイリストID
+   * @returns 楽曲のURI一覧
+   */
+  const getPlaylistTracks = async (playlistId: string): Promise<Array<string>> => {
     const trackUris: Array<string> = []
-    let nextUrl = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=50&fields=items(track.uri),next`
+    let nextUrl =
+      playlistId === SPOTIFY.LIKED_SONGS_PLAYLIST_ID
+        ? "https://api.spotify.com/v1/me/tracks?limit=50"
+        : `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=50&fields=items(track.uri),next`
 
     // 再帰関数よりwhileループの方が見通しが良い…
     while (isValidString(nextUrl)) {
-      const { data } = await axios.get<SpotifyApi.PlaylistTrackResponse>(nextUrl, {
+      const { data } = await axios.get<
+        SpotifyApi.PlaylistTrackResponse | SpotifyApi.UsersSavedTracksResponse
+      >(nextUrl, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -137,8 +149,8 @@ export const spotifyApiFunctions = $((accessToken: string): SpotifyApiFunctions 
       nextUrl = data.next
     }
 
-    return trackUris.filter(isValidString)
-  })
+    return uniq(trackUris.filter(isValidString)) // 重複を排除し、URIが空でないものだけを返す
+  }
 
   /**
    * 一時的なプレイリストを作成し、楽曲をセットする
@@ -192,13 +204,12 @@ export const spotifyApiFunctions = $((accessToken: string): SpotifyApiFunctions 
       []
     )
 
-    await Promise.all(
-      chunkedTrackUriList.map(chunk =>
-        api.post<SpotifyApi.PlaylistSnapshotResponse>(`/playlists/${id}/tracks`, {
-          uris: chunk
-        })
-      )
-    )
+    // 並列でリクエストするとSpotifyのAPIが500系エラーを返してくることが多いので直列でリクエストする
+    for (const chunk of chunkedTrackUriList) {
+      await api.post<SpotifyApi.PlaylistSnapshotResponse>(`/playlists/${id}/tracks`, {
+        uris: chunk
+      })
+    }
 
     return {
       id,

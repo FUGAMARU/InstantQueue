@@ -12,11 +12,13 @@ export const SPOTIFY = {
   API_ENDPOINT_AUTH: "https://accounts.spotify.com/authorize",
   /** Spotify APIのスコープ */
   API_SCOPES:
-    "playlist-read-private playlist-modify-private playlist-read-collaborative user-read-email user-read-playback-state user-modify-playback-state",
+    "playlist-read-private playlist-modify-private playlist-read-collaborative user-library-read user-read-email user-read-playback-state user-modify-playback-state",
   /** 一時的なプレイリストの名前 */
   TEMPORARY_PLAYLIST_NAME: "InstantQueue Temporary Playlist",
   /** ユーザー名のフォールバック */
-  USERNAME_FALLBACK: "User"
+  USERNAME_FALLBACK: "User",
+  /** お気に入りの曲の仮想プレイリストID */
+  LIKED_SONGS_PLAYLIST_ID: "liked-songs"
 } as const
 
 /** WebStorage関連の定数 */
@@ -35,6 +37,8 @@ export const WEB_STORAGE = {
 export const ELEMENTS = {
   /** プレイリストのテーマカラーを取得できなかった時のフォールバックカラー */
   PLAYLIST_COLOR_FALLBACK: "#212121",
+  /** お気に入りの曲のテーマカラー */
+  LIKED_SONGS_COLOR: "#5e63cd",
   /** ボタンコンテンツIDの接頭辞 */
   BUTTON_CONTENTS_ID_PREFIX: "button-contents-",
   /** ボタンコンテンツのフェードアニメーションのDuration */
