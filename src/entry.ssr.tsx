@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable jsdoc/require-jsdoc */
+
 /**
  * WHAT IS THIS FILE?
  *
@@ -10,12 +13,10 @@
  * - npm run build
  *
  */
-import {
-  renderToStream,
-  type RenderToStreamOptions,
-} from "@builder.io/qwik/server";
-import { manifest } from "@qwik-client-manifest";
-import Root from "./root";
+import { renderToStream, type RenderToStreamOptions } from "@builder.io/qwik/server"
+import { manifest } from "@qwik-client-manifest"
+
+import Root from "@/root"
 
 export default function (opts: RenderToStreamOptions) {
   return renderToStream(<Root />, {
@@ -24,10 +25,10 @@ export default function (opts: RenderToStreamOptions) {
     // Use container attributes to set attributes on the html tag.
     containerAttributes: {
       lang: "en-us",
-      ...opts.containerAttributes,
+      ...opts.containerAttributes
     },
     serverData: {
-      ...opts.serverData,
-    },
-  });
+      ...opts.serverData
+    }
+  })
 }

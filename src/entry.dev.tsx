@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable jsdoc/require-jsdoc */
 /*
  * WHAT IS THIS FILE?
  *
@@ -9,9 +11,13 @@
  * - More code is transferred to the browser than in SSR mode.
  * - Optimizer/Serialization/Deserialization code is not exercised!
  */
-import { render, type RenderOptions } from "@builder.io/qwik";
-import Root from "./root";
+
+import { render } from "@builder.io/qwik"
+
+import Root from "@/root"
+
+import type { RenderOptions } from "@builder.io/qwik"
 
 export default function (opts: RenderOptions) {
-  return render(document, <Root />, opts);
+  return render(document, <Root />, opts)
 }

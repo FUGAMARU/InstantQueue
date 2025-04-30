@@ -24,6 +24,22 @@ type Props = {
   playbackState: PropsOf<typeof PlaybackState>["state"]
 }
 
+/**
+ * SpotifyのAPIがレスポンスする自動生成されたプレイリストの画像をnode-vibrant用に取得しようとするとCORSエラーが発生するので、Viteのプロキシを利用して画像URLを取得する
+ *
+ * @param thumbnailUrl - プレイリストのサムネイルURL
+ * @returns プロキシを通した画像URL
+ */
+const getProxiedThumbnailImageUrl = (thumbnailUrl: string): string => {
+  const url = new URL(thumbnailUrl)
+
+  if (url.host !== "mosaic.scdn.co") {
+    return thumbnailUrl
+  }
+
+  return `/proxy/spotify${url.pathname}${url.search}`
+}
+
 export default component$(({ accessToken, playbackState }: Props) => {
   const unresolvedSpotifyApi = spotifyApiFunctions(accessToken)
   const userName = useSignal("")
@@ -166,16 +182,18 @@ export default component$(({ accessToken, playbackState }: Props) => {
     userName.value = userNameResponse
 
     const userPlaylists = await spotifyApi.getUserPlaylists()
-    const playlistsWithThemeColor = await Promise.all(
-      userPlaylists.map(async playlist => {
-        const palette = await Vibrant.from(playlist.thumbnail).getPalette()
-        const vibrantColor = palette.Vibrant?.hex
-        return {
-          ...playlist,
-          themeColor: vibrantColor ?? ELEMENTS.PLAYLIST_COLOR_FALLBACK
-        }
-      })
+    const playlistPalettes = await Promise.all(
+      userPlaylists.map(async playlist =>
+        Vibrant.from(getProxiedThumbnailImageUrl(playlist.thumbnail)).getPalette()
+      )
     )
+    const playlistsWithThemeColor = playlistPalettes.map((palette, index) => {
+      const vibrantColor = palette.Vibrant?.hex
+      return {
+        ...userPlaylists[index],
+        themeColor: vibrantColor ?? ELEMENTS.PLAYLIST_COLOR_FALLBACK
+      }
+    })
 
     Object.assign(playlists, playlistsWithThemeColor)
 

@@ -55,7 +55,21 @@ export default defineConfig(({ command, mode }): UserConfig => {
       https: {
         key: fs.readFileSync("./local.dev-key.pem"),
         cert: fs.readFileSync("./local.dev.pem"),
-      }
+      },
+      proxy: {
+        // なぜかプレイリストの画像取得時にCORSエラーが出てしまうのでProxyさせる
+        '/proxy/spotify': {
+          target: 'https://mosaic.scdn.co',
+          changeOrigin: true,
+          // selfHandleResponse: false,
+          rewrite: path => path.replace(/^\/proxy\/spotify/, ''),
+          // configure: (proxy) => {
+          //   proxy.on('proxyRes', (proxyRes) => {
+          //     proxyRes.headers['cache-control'] = 'public, max-age=3600';
+          //   });
+          // }
+        },
+      },
     },
     preview: {
       headers: {
