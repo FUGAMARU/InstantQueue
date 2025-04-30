@@ -1,4 +1,5 @@
 import { component$, noSerialize, useSignal, useStore, useVisibleTask$ } from "@builder.io/qwik"
+import clsx from "clsx"
 import * as THREE from "three"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 
@@ -17,7 +18,13 @@ type ThreeObjects = {
   renderer: NoSerialize<THREE.WebGLRenderer>
 }
 
-export default component$(() => {
+/** Props */
+type Props = {
+  /** 少し大きめに表示するかどうか */
+  isLarger?: boolean
+}
+
+export default component$(({ isLarger = false }: Props) => {
   const canvasRef = useSignal<HTMLCanvasElement>()
   const threeObjects = useStore<ThreeObjects>({
     scene: noSerialize(undefined),
@@ -41,8 +48,8 @@ export default component$(() => {
     scene.background = new THREE.Color(0x212121)
 
     const dpr = window.devicePixelRatio ?? 1
-    const pixelW = 180 * dpr
-    const pixelH = 150 * dpr
+    const pixelW = (isLarger ? 300 : 180) * dpr
+    const pixelH = (isLarger ? 240 : 150) * dpr
     const initialCameraState = {
       position: {
         x: 1.1456670168700795,
@@ -144,5 +151,5 @@ export default component$(() => {
     animate()
   })
 
-  return <canvas ref={canvasRef} class={styles.canvasElement} />
+  return <canvas ref={canvasRef} class={clsx(styles.canvasElement, isLarger && styles.Larger)} />
 })

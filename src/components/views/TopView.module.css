@@ -32,3 +32,31 @@
     }
   }
 }
+
+@media (width >= 960px) {
+  .topView {
+    max-width: 860px;
+    padding: 0 24px;
+    margin: 0 auto;
+
+    > .main {
+      gap: 64px;
+
+      > .upper {
+        gap: 24px;
+
+        > .title {
+          font-size: 48px;
+        }
+
+        > .description {
+          font-size: 16px;
+        }
+      }
+
+      > .button {
+        width: 280px;
+      }
+    }
+  }
+}

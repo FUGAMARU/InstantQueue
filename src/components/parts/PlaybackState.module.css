@@ -3,7 +3,7 @@
   gap: 2px;
   align-items: center;
   width: fit-content;
-  height: 14px;
+  height: 20px;
   padding: 2px 6px;
   font-family: Gabarito, sans-serif;
   border-radius: 4px;
@@ -22,13 +22,29 @@
 
   > .icon {
     display: inline-flex;
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
   }
 
   > .text {
     text-box: trim-both cap alphabetic;
     padding-bottom: 0.5px;
-    font-size: 10px;
+    font-size: 12px;
+  }
+}
+
+@media (width >= 960px) {
+  .playbackState {
+    height: 22px;
+    padding: 4px 8px;
+
+    > .icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    > .text {
+      font-size: 16px;
+    }
   }
 }

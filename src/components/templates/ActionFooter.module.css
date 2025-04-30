@@ -23,3 +23,16 @@
     }
   }
 }
+
+@media (width >= 960px) {
+  .actionFooter {
+    min-width: 860px;
+    margin: 0 auto;
+
+    > .buttons {
+      > .button {
+        width: 280px;
+      }
+    }
+  }
+}

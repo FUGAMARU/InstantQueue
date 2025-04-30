@@ -1,5 +1,6 @@
 import { $, component$, isServer, useSignal, useStore, useTask$ } from "@builder.io/qwik"
 import { isAxiosError } from "axios"
+import clsx from "clsx"
 import { shuffle } from "es-toolkit"
 import { Vibrant } from "node-vibrant/browser"
 
@@ -202,6 +203,7 @@ export default component$(({ accessToken, playbackState }: Props) => {
         <div class={styles.version}>
           <img
             alt="InstantQueue Logo"
+            class={styles.logo}
             height={16}
             src="https://placehold.jp/16x16.png"
             width={16}
@@ -217,8 +219,11 @@ export default component$(({ accessToken, playbackState }: Props) => {
 
         <PlaybackState state={playbackState} />
 
-        <div class={styles.mascot}>
+        <div class={clsx(styles.mascot, styles.displaySP)}>
           <Mascot />
+        </div>
+        <div class={clsx(styles.mascot, styles.displayPC)}>
+          <Mascot isLarger />
         </div>
       </div>
 
