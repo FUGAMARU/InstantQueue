@@ -154,7 +154,7 @@ export default component$(({ isLarger = false }: Props) => {
       const elapsedTime = clock.getElapsedTime()
 
       if (isDefined(model)) {
-        model.position.y = 1 + Math.sin(elapsedTime * 2) * 0.05 // 上下の移動幅を小さくし、インターバルを早く
+        model.position.y = 1 + Math.sin(elapsedTime * 2) * 0.05
       }
 
       renderer.render(scene, camera)
