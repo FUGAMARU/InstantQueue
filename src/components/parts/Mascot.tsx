@@ -4,6 +4,7 @@ import * as THREE from "three"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 
 import styles from "@/components/parts/Mascot.module.css"
+import { isDefined } from "@/utils"
 
 import type { NoSerialize } from "@builder.io/qwik"
 import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader.js"
@@ -123,8 +124,10 @@ export default component$(({ isLarger = false }: Props) => {
     const gltfLoader = new GLTFLoader()
     const gltfPath = "/mascot/scene.gltf"
 
+    let model: THREE.Object3D | undefined
+
     gltfLoader.load(gltfPath, (gltf: GLTF) => {
-      const model = gltf.scene
+      model = gltf.scene
 
       model.position.set(0, 1, 0)
       model.scale.set(0.9, 0.9, 0.9)
@@ -142,9 +145,18 @@ export default component$(({ isLarger = false }: Props) => {
       spotLight.target.position.copy(targetCenter)
     })
 
+    const clock = new THREE.Clock()
+
     /** アニメーションループ */
     const animate = (): void => {
       requestAnimationFrame(animate)
+
+      const elapsedTime = clock.getElapsedTime()
+
+      if (isDefined(model)) {
+        model.position.y = 1 + Math.sin(elapsedTime * 2) * 0.05 // 上下の移動幅を小さくし、インターバルを早く
+      }
+
       renderer.render(scene, camera)
     }
 
