@@ -52,7 +52,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
         // Don't cache the server response in dev mode
         "Cache-Control": "public, max-age=0",
       },
-      https: process.env.NODE_ENV === 'development' ? {
+      https: import.meta.env.DEV ? {
         key: fs.readFileSync("./local.dev-key.pem"),
         cert: fs.readFileSync("./local.dev.pem"),
       } : undefined,
