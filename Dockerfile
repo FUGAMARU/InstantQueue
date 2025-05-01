@@ -1,4 +1,4 @@
-FROM node:${NODE_VERSION}-alpine as base
+FROM node:22-alpine as base
 WORKDIR /usr/src/app
 
 FROM base as deps

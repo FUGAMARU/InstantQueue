@@ -5,8 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        NODE_VERSION: 22.15.0
     ports:
       - "3010:3000"
     environment:
