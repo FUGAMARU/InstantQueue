@@ -33,7 +33,7 @@ type Props = {
 const getProxiedThumbnailImageUrl = (thumbnailUrl: string): string => {
   const url = new URL(thumbnailUrl)
 
-  if (url.host !== "mosaic.scdn.co" || import.meta.env.PROD) {
+  if (url.host !== "mosaic.scdn.co") {
     return thumbnailUrl
   }
 
