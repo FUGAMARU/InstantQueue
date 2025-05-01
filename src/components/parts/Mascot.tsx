@@ -1,9 +1,11 @@
 import { component$, noSerialize, useSignal, useStore, useVisibleTask$ } from "@builder.io/qwik"
+import { animate } from "animejs"
 import clsx from "clsx"
 import * as THREE from "three"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 
 import styles from "@/components/parts/Mascot.module.css"
+import { ELEMENTS } from "@/constants"
 import { isDefined } from "@/utils"
 
 import type { NoSerialize } from "@builder.io/qwik"
@@ -148,8 +150,8 @@ export default component$(({ isLarger = false }: Props) => {
     const clock = new THREE.Clock()
 
     /** アニメーションループ */
-    const animate = (): void => {
-      requestAnimationFrame(animate)
+    const animationLoop = (): void => {
+      requestAnimationFrame(animationLoop)
 
       const elapsedTime = clock.getElapsedTime()
 
@@ -160,7 +162,19 @@ export default component$(({ isLarger = false }: Props) => {
       renderer.render(scene, camera)
     }
 
-    animate()
+    animationLoop()
+
+    const canvas = canvasRef.value
+
+    if (!isDefined(canvas)) {
+      return
+    }
+
+    animate(canvas, {
+      opacity: 1,
+      duration: ELEMENTS.MASCOT_FADE_ANIMATION_DURATION,
+      delay: ELEMENTS.MASCOT_FADE_ANIMATION_DELAY
+    })
   })
 
   return <canvas ref={canvasRef} class={clsx(styles.canvasElement, isLarger && styles.Larger)} />

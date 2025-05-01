@@ -39,12 +39,14 @@ export const ELEMENTS = {
   PLAYLIST_COLOR_FALLBACK: "#212121",
   /** お気に入りの曲のテーマカラー */
   LIKED_SONGS_COLOR: "#5e63cd",
-  /** ボタンコンテンツIDの接頭辞 */
-  BUTTON_CONTENTS_ID_PREFIX: "button-contents-",
-  /** ボタンコンテンツのフェードアニメーションのDuration */
+  /** ボタンコンテンツのフェードアニメーションのDuration (ミリ秒) */
   BUTTON_CONTENTS_FADE_ANIMATION_DURATION: 400,
   /** ボタンコンテンツのフェードアニメーション後にチェックマークを表示しておく秒数 (ミリ秒) */
-  BUTTON_CONTENTS_CHECK_MARK_DISPLAY_DURATION: 3000
+  BUTTON_CONTENTS_CHECK_MARK_DISPLAY_DURATION: 3000,
+  /** マスコットキャラクターのフェードアニメーションのDuration (ミリ秒) */
+  MASCOT_FADE_ANIMATION_DURATION: 1000,
+  /** マスコットキャラクターのフェードアニメーションのDelay (ミリ秒) */
+  MASCOT_FADE_ANIMATION_DELAY: 150
 }
 
 /** 再生不可能な状態で再生開始しようとした時に表示するアラートメッセージ */

@@ -1,6 +1,7 @@
 .canvasElement {
   width: 180px;
   height: 150px;
+  opacity: 0;
 
   &.Larger {
     width: 300px;

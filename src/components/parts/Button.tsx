@@ -36,6 +36,7 @@ export default component$(
     buttonCheckMarkTrigger,
     isProcessing = false
   }: Props) => {
+    const buttonContentsRef = useSignal<HTMLButtonElement>()
     const shouldDisplayCheckMark = useSignal(false)
 
     useTask$(({ track }) => {
@@ -45,7 +46,7 @@ export default component$(
         return
       }
 
-      const contents = document.getElementById(`${ELEMENTS.BUTTON_CONTENTS_ID_PREFIX}${label}`)
+      const contents = buttonContentsRef.value
 
       if (!isDefined(contents)) {
         return
@@ -87,7 +88,7 @@ export default component$(
         onClick$={handleClick$}
         type="button"
       >
-        <div class={styles.contents} id={`${ELEMENTS.BUTTON_CONTENTS_ID_PREFIX}${label}`}>
+        <div ref={buttonContentsRef} class={styles.contents}>
           {shouldDisplayCheckMark.value ? (
             <span class={styles.check}>
               <Icon name="check" />

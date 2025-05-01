@@ -1,4 +1,4 @@
 {
-  "cSpell.ignoreWords": ["qwik", "pkce", "destyle", "gabarito", "gltf"],
+  "cSpell.ignoreWords": ["qwik", "pkce", "destyle", "gabarito", "gltf", "animejs"],
   "typescript.preferences.importModuleSpecifier": "non-relative"
 }
