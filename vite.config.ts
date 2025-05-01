@@ -52,10 +52,10 @@ export default defineConfig(({ command, mode }): UserConfig => {
         // Don't cache the server response in dev mode
         "Cache-Control": "public, max-age=0",
       },
-      https: {
+      https: process.env.NODE_ENV === 'development' ? {
         key: fs.readFileSync("./local.dev-key.pem"),
         cert: fs.readFileSync("./local.dev.pem"),
-      },
+      } : undefined,
       proxy: {
         // なぜかプレイリストの画像取得時にCORSエラーが出てしまうのでProxyさせる
         '/proxy/spotify': {

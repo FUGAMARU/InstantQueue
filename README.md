@@ -65,3 +65,13 @@ npm run build # or `yarn build`
 ```
 
 TODO: 開発時の自己証明書やhostsファイルについて記載。自己証明書だけで`https://localhost:5173`をSpotifyのAPIにリクエストする時の`redirect_uri`として指定すると`Insecure redirect URI`というエラーが返ってくるのでその対策。
+
+## Express Server
+
+This app has a minimal [Express server](https://expressjs.com/) implementation. After running a full build, you can preview the build using the command:
+
+```
+npm run serve
+```
+
+Then visit [http://localhost:8080/](http://localhost:8080/)
