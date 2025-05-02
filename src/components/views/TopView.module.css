@@ -14,7 +14,6 @@
       flex-direction: column;
       gap: 16px;
       align-items: center;
-      font-family: Gabarito, sans-serif;
 
       > .title {
         font-size: 36px;

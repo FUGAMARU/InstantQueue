@@ -5,7 +5,6 @@
   width: fit-content;
   height: 20px;
   padding: 2px 6px;
-  font-family: Gabarito, sans-serif;
   border-radius: 4px;
 
   &.Ready {

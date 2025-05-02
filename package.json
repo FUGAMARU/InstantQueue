@@ -56,6 +56,7 @@
   },
   "dependencies": {
     "@fontsource/gabarito": "^5.2.5",
+    "@fontsource/noto-sans-jp": "^5.2.5",
     "@types/spotify-api": "^0.0.25",
     "@types/three": "^0.176.0",
     "animejs": "^4.0.2",

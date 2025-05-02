@@ -3,6 +3,7 @@
 html,
 body {
   height: 100%;
+  font-family: Gabarito, sans-serif;
   line-height: 1;
   color: var(--color-white);
   background-color: var(--color-black);

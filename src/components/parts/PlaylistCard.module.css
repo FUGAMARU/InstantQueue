@@ -26,12 +26,14 @@
       place-items: center;
       height: 16px;
       padding: 0 12px;
+      font-family: "Noto Sans JP", sans-serif;
       font-size: 10px;
       font-weight: bold;
       word-break: break-all;
       border-bottom-right-radius: var(--radius);
       border-bottom-left-radius: var(--radius);
       backdrop-filter: blur(2px);
+      text-box: trim-both cap alphabetic;
 
       > .inner {
         display: -webkit-box;

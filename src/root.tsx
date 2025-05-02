@@ -6,6 +6,7 @@ import "destyle.css"
 import "@/styles/global.css"
 import "@fontsource/gabarito/400.css"
 import "@fontsource/gabarito/700.css"
+import "@fontsource/noto-sans-jp/700.css"
 import { RouterHead } from "@/components/router-head/router-head"
 import { TokenContext } from "@/token-context"
 
