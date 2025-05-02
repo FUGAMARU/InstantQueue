@@ -21,6 +21,7 @@ import type { DocumentHead } from "@builder.io/qwik-city"
 
 export default component$(() => {
   const accessToken = useContext(TokenContext)
+  const isRefreshingAccessToken = useSignal(false)
   const playbackState = useSignal<PropsOf<typeof SelectorView>["playbackState"]>("unable")
   const view = useSignal<"loading" | "top" | "selector">("loading")
 
@@ -47,13 +48,22 @@ export default component$(() => {
      * @param refreshToken - リフレッシュトークン
      */
     const refreshAndSetAccessToken = async (refreshToken: string): Promise<void> => {
-      const spotifyAccountsApi = await spotifyAccountsApiFunctions()
-      const accessTokenInfo = await spotifyAccountsApi.refreshAccessToken(refreshToken)
-      accessToken.value = accessTokenInfo.accessToken
-      localStorage.setItem(
-        WEB_STORAGE.REFRESH_TOKEN_LOCAL_STORAGE_KEY,
-        accessTokenInfo.refreshToken
-      )
+      if (isRefreshingAccessToken.value) {
+        return
+      }
+      isRefreshingAccessToken.value = true
+
+      try {
+        const spotifyAccountsApi = await spotifyAccountsApiFunctions()
+        const accessTokenInfo = await spotifyAccountsApi.refreshAccessToken(refreshToken)
+        accessToken.value = accessTokenInfo.accessToken
+        localStorage.setItem(
+          WEB_STORAGE.REFRESH_TOKEN_LOCAL_STORAGE_KEY,
+          accessTokenInfo.refreshToken
+        )
+      } finally {
+        isRefreshingAccessToken.value = false
+      }
     }
 
     // if文で早期returnするとfocusのイベントハンドリングまで到達できないのでswitch文を使用
