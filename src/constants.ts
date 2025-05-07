@@ -7,7 +7,7 @@ export const SPOTIFY = {
   /** SpotifyのクライアントID */
   CLIENT_ID: import.meta.env.PUBLIC_SPOTIFY_CLIENT_ID,
   /** PKCEのリダイレクトURI */
-  PKCE_REDIRECT_URI: `${import.meta.env.PUBLIC_SITE_ORIGIN}/pkce`,
+  PKCE_REDIRECT_URI: `${import.meta.env.PUBLIC_ORIGIN}/pkce`,
   /** Spotifyの認証エンドポイント */
   API_ENDPOINT_AUTH: "https://accounts.spotify.com/authorize",
   /** Spotify APIのスコープ */
