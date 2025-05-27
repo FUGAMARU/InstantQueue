@@ -1,77 +1,23 @@
-# Qwik City App ⚡️
+# InstantQueue
 
-- [Qwik Docs](https://qwik.dev/)
-- [Discord](https://qwik.dev/chat)
-- [Qwik GitHub](https://github.com/QwikDev/qwik)
-- [@QwikDev](https://twitter.com/QwikDev)
-- [Vite](https://vitejs.dev/)
+InstantQueue is a web application that lets you select any number of playlists from your Spotify “My Playlists,” merge them into a single playlist, and automatically play the result.
 
----
+I previously created a similar service called MixJuice, but InstantQueue strips out the built-in player from MixJuice to keep things more minimal and environment-agnostic.
 
-## Project Structure
+This app is built with Qwik.
 
-This project is using Qwik with [QwikCity](https://qwik.dev/qwikcity/overview/). QwikCity is just an extra set of tools on top of Qwik to make it easier to build a full site, including directory-based routing, layouts, and more.
+Live Demo is [here](https://iq.fugamaru.com/)
 
-Inside your project, you'll see the following directory structure:
+## Screenshots
 
-```
-├── public/
-│   └── ...
-└── src/
-    ├── components/
-    │   └── ...
-    └── routes/
-        └── ...
-```
+| TopView                                                                                                    | MainView                                                                                                   |
+| ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| <img height="500" src="https://github.com/user-attachments/assets/5861f4d1-8bc9-4012-b6c1-c3d1e68ff82e" /> | <img height="500" src="https://github.com/user-attachments/assets/f4a59f0c-2c3b-41a6-9fab-4c71c27d6127" /> |
 
-- `src/routes`: Provides the directory-based routing, which can include a hierarchy of `layout.tsx` layout files, and an `index.tsx` file as the page. Additionally, `index.ts` files are endpoints. Please see the [routing docs](https://qwik.dev/qwikcity/routing/overview/) for more info.
+## Credit
 
-- `src/components`: Recommended directory for components.
+[Cute Character](https://sketchfab.com/3d-models/cute-character-b0889531adc346e19b0bc075cfe58457) by [Starkosha](https://sketchfab.com/Starkosha)
 
-- `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
+## License
 
-## Add Integrations and deployment
-
-Use the `npm run qwik add` command to add additional integrations. Some examples of integrations includes: Cloudflare, Netlify or Express Server, and the [Static Site Generator (SSG)](https://qwik.dev/qwikcity/guides/static-site-generation/).
-
-```shell
-npm run qwik add # or `yarn qwik add`
-```
-
-## Development
-
-Development mode uses [Vite's development server](https://vitejs.dev/). The `dev` command will server-side render (SSR) the output during development.
-
-```shell
-npm start # or `yarn start`
-```
-
-> Note: during dev mode, Vite may request a significant number of `.js` files. This does not represent a Qwik production build.
-
-## Preview
-
-The preview command will create a production build of the client modules, a production build of `src/entry.preview.tsx`, and run a local server. The preview server is only for convenience to preview a production build locally and should not be used as a production server.
-
-```shell
-npm run preview # or `yarn preview`
-```
-
-## Production
-
-The production build will generate client and server modules by running both client and server build commands. The build command will use Typescript to run a type check on the source code.
-
-```shell
-npm run build # or `yarn build`
-```
-
-TODO: 開発時の自己証明書やhostsファイルについて記載。自己証明書だけで`https://localhost:5173`をSpotifyのAPIにリクエストする時の`redirect_uri`として指定すると`Insecure redirect URI`というエラーが返ってくるのでその対策。
-
-## Express Server
-
-This app has a minimal [Express server](https://expressjs.com/) implementation. After running a full build, you can preview the build using the command:
-
-```
-npm run serve
-```
-
-Then visit [http://localhost:8080/](http://localhost:8080/)
+This project is released under the MIT License, see LICENSE file.
