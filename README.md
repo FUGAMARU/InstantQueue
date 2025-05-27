@@ -10,9 +10,9 @@ Live Demo is [here](https://iq.fugamaru.com/)
 
 ## Screenshots
 
-| TopView                                                                                                    | MainView                                                                                                   |
+| TopView                                                                                                    | SelectorView                                                                                               |
 | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| <img height="500" src="https://github.com/user-attachments/assets/5861f4d1-8bc9-4012-b6c1-c3d1e68ff82e" /> | <img height="500" src="https://github.com/user-attachments/assets/f4a59f0c-2c3b-41a6-9fab-4c71c27d6127" /> |
+| <img height="500" src="https://github.com/user-attachments/assets/5861f4d1-8bc9-4012-b6c1-c3d1e68ff82e" /> | <img height="500" src="https://github.com/user-attachments/assets/ea28d7ec-5784-4f27-aa93-ca994cf215bf" /> |
 
 ## Credit
 
