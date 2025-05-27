@@ -229,13 +229,7 @@ export default component$(({ accessToken, playbackState }: Props) => {
     <div class={styles.selectorView}>
       <div class={styles.header}>
         <div class={styles.version}>
-          <img
-            alt="InstantQueue Logo"
-            class={styles.logo}
-            height={16}
-            src="https://placehold.jp/16x16.png"
-            width={16}
-          />
+          <img class={styles.logo} height={16} src="/logo.svg" width={16} />
           <span class={styles.text}>InstantQueue v1.0.0</span>
         </div>
 
